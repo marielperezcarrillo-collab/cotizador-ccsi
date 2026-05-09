@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beneficio Exclusivo CCSI CDMX</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1A56DB;
+    --blue-dark: #1039A0;
+    --blue-light: #EBF2FF;
+    --green: #057A55;
+    --green-light: #DEF7EC;
+    --red: #C81E1E;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-400: #9CA3AF;
+    --gray-600: #4B5563;
+    --gray-800: #1F2937;
+    --gray-900: #111827;
+    --border: #E5E7EB;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 10px; }
+  .topbar-logo {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .topbar-name { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+  .topbar-sub { font-size: 11px; color: var(--gray-400); }
+  .topbar-admin {
+    font-size: 12px; color: var(--gray-400);
+    cursor: pointer; text-decoration: none;
+    padding: 5px 12px; border-radius: 20px;
+    border: 1px solid var(--border);
+    transition: all .15s;
+  }
+  .topbar-admin:hover { color: var(--blue); border-color: var(--blue); background: var(--blue-light); }
+
+  /* MAIN LAYOUT */
+  .main { max-width: 560px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 2rem; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--gray-400); margin-bottom: 8px; }
+  .progress-bar { height: 4px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #60A5FA); border-radius: 4px; transition: width .4s ease; }
+
+  /* SECTION HEADER */
+  .section-header { margin-bottom: 1.5rem; }
+  .section-eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--blue); margin-bottom: 6px; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--gray-900); line-height: 1.2; }
+
+  /* CARD */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+
+  /* FIELD */
+  .field { margin-bottom: 1.25rem; }
+  .field:last-child { margin-bottom: 0; }
+  .field-label { font-size: 13px; font-weight: 500; color: var(--gray-600); margin-bottom: 6px; display: block; }
+  .field-label .req { color: var(--red); margin-left: 2px; }
+  .field input, .field select {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    color: var(--gray-900); background: white;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .field input:focus, .field select:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(26,86,219,.1);
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:480px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* RADIO / CHECK */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    cursor: pointer; transition: all .15s;
+    font-size: 14px; color: var(--gray-800);
+    user-select: none;
+  }
+  .opt:hover { border-color: var(--blue); background: var(--blue-light); }
+  .opt.selected { border-color: var(--blue); background: var(--blue-light); color: var(--blue-dark); font-weight: 500; }
+  .opt-indicator {
+    width: 18px; height: 18px; flex-shrink: 0;
+    border: 2px solid var(--gray-200); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .opt.selected .opt-indicator { border-color: var(--blue); background: var(--blue); }
+  .opt.selected .opt-indicator::after { content: ''; width: 7px; height: 7px; background: white; border-radius: 50%; }
+  .opt-check { border-radius: 4px; }
+  .opt.selected .opt-check::after { content: '✓'; color: white; font-size: 11px; line-height: 1; }
+
+  /* CATEGORY CARDS */
+  .cat-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+  .cat-card {
+    background: white; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1rem 1.25rem;
+    cursor: pointer; transition: all .2s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .cat-card:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(26,86,219,.08); }
+  .cat-card.selected { border-color: var(--blue); background: var(--blue-light); }
+  .cat-icon-wrap {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--gray-100); display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0; transition: background .2s;
+  }
+  .cat-card.selected .cat-icon-wrap { background: rgba(26,86,219,.15); }
+  .cat-info h3 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .cat-info p { font-size: 12px; color: var(--gray-400); }
+  .cat-card.selected .cat-info h3 { color: var(--blue-dark); }
+  .cat-check {
+    margin-left: auto; width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--gray-200); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .cat-card.selected .cat-check { background: var(--blue); border-color: var(--blue); }
+  .cat-card.selected .cat-check::after { content: '✓'; color: white; font-size: 11px; }
+
+  /* BUTTONS */
+  .btn-row { display: flex; gap: 10px; margin-top: 1.5rem; }
+  .btn {
+    flex: 1; padding: 11px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all .15s; border: 1.5px solid var(--border);
+    background: white; color: var(--gray-800);
+  }
+  .btn:hover { background: var(--gray-100); }
+  .btn.primary { background: var(--blue); border-color: var(--blue); color: white; }
+  .btn.primary:hover { background: var(--blue-dark); }
+  .btn.primary:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* SPINNER */
+  .spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: white; border-radius: 50%;
+    animation: spin .7s linear infinite;
+    vertical-align: middle; margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SUMMARY */
+  .summary-block { margin-bottom: 1.25rem; }
+  .summary-block-title {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--gray-400);
+    margin-bottom: 8px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; }
+  .summary-label { color: var(--gray-400); }
+  .summary-value { color: var(--gray-900); font-weight: 500; text-align: right; max-width: 55%; }
+  .tag {
+    display: inline-block; font-size: 11px; padding: 3px 10px;
+    border-radius: 20px; background: var(--blue-light); color: var(--blue-dark);
+    font-weight: 500; margin-right: 5px; margin-bottom: 4px;
+  }
+
+  /* SUCCESS */
+  .success-wrap { text-align: center; padding: 3rem 1rem; }
+  .success-circle {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--green-light); display: flex;
+    align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem; font-size: 28px;
+  }
+  .success-wrap h2 { font-family: 'DM Serif Display', serif; font-size: 24px; margin-bottom: 8px; }
+  .success-wrap p { font-size: 14px; color: var(--gray-400); max-width: 280px; margin: 0 auto 1.5rem; }
+  .success-badge {
+    display: inline-block; background: var(--green-light);
+    color: var(--green); font-size: 13px; font-weight: 500;
+    padding: 10px 20px; border-radius: var(--radius);
+  }
+
+  /* ADMIN LOGIN */
+  .login-wrap { max-width: 360px; margin: 4rem auto; padding: 0 1rem; }
+  .login-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+  .login-icon { font-size: 36px; text-align: center; margin-bottom: 1rem; }
+  .login-title { font-family: 'DM Serif Display', serif; font-size: 22px; text-align: center; margin-bottom: 4px; }
+  .login-sub { font-size: 13px; color: var(--gray-400); text-align: center; margin-bottom: 1.5rem; }
+  .login-err { font-size: 13px; color: var(--red); background: #FEF2F2; padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 12px; display: none; }
+  .back-link { font-size: 12px; color: var(--gray-400); cursor: pointer; text-align: center; display: block; margin-top: 1rem; text-decoration: underline; }
+  .back-link:hover { color: var(--blue); }
+
+  /* ADMIN PANEL */
+  .admin-wrap { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+  .admin-title { font-family: 'DM Serif Display', serif; font-size: 22px; }
+  .admin-sub { font-size: 13px; color: var(--gray-400); margin-top: 2px; }
+  .admin-logout { font-size: 12px; padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: white; cursor: pointer; color: var(--gray-600); font-family: 'DM Sans', sans-serif; transition: all .15s; }
+  .admin-logout:hover { border-color: var(--red); color: var(--red); }
+  .cotiz-item {
+    background: white; border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1rem 1.25rem;
+    margin-bottom: 10px; transition: border-color .15s;
+  }
+  .cotiz-item:hover { border-color: var(--gray-400); }
+  .cotiz-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .cotiz-name { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .cotiz-meta { font-size: 12px; color: var(--gray-400); }
+  .cotiz-tags { margin-top: 6px; }
+  .cotiz-detail { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; }
+  .empty-state { text-align: center; padding: 4rem 1rem; color: var(--gray-400); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+  .pdf-btn {
+    flex: none; padding: 7px 16px; font-size: 12px; font-weight: 500;
+    border-radius: var(--radius-sm); background: var(--blue); color: white;
+    border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    white-space: nowrap; transition: background .15s;
+  }
+  .pdf-btn:hover { background: var(--blue-dark); }
+
+  .sub-section { margin-top: 1.5rem; }
+  .sub-section-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--gray-400); margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">🏢</div>
+    <div>
+      <div class="topbar-name">CCSI CDMX</div>
+      <div class="topbar-sub">Módulo Virtual</div>
+    </div>
+  </div>
+  <span class="topbar-admin" id="adminLink" onclick="goAdmin()">Acceso admin</span>
+</div>
+
+<div id="root"></div>
+
+<script>
+const MAKE = 'https://hook.us2.make.com/g791jkw336u7k6jq7tvaxti9vd9dc3yx';
+const PASS = 'Mperez26++';
+const TO   = 'marielperezcarrillo@gmail.com';
+
+const S = {
+  view: 'client', step: 0,
+  data: {}, cats: [], subs: {},
+  screens: [], sent: false
+};
+
+/* ── ROUTING ── */
+function goAdmin(){ S.view='login'; render(); }
+
+/* ── SCREEN LIST ── */
+function buildScreens(){
+  const sc=[{id:'datos'},{id:'prioridad'}];
+  S.cats.forEach(c=>{
+    if(c==='patrimonio'){const s=S.subs['patrimonio']||[];['auto','moto','hogar','mascotas'].forEach(x=>{if(s.includes(x))sc.push({id:x});});}
+    if(c==='salud'){const s=S.subs['salud']||[];if(s.includes('gmm'))sc.push({id:'gmm'});if(s.includes('vida'))sc.push({id:'vida'});}
+    if(c==='futuro'){const s=S.subs['futuro']||[];['ahorro','retiro','edufam','edupro'].forEach(x=>{if(s.includes(x))sc.push({id:x});});}
+  });
+  sc.push({id:'resumen'});
+  S.screens=sc;
+}
+
+/* ── HELPERS ── */
+function sv(k,v){S.data[k]=v;}
+function sRow(l,v){if(!v&&v!==0)return '';return `<div class="summary-row"><span class="summary-label">${l}</span><span class="summary-value">${v}</span></div>`;}
+
+function radio(key,opts){
+  return `<div class="options">${opts.map(o=>{const v=typeof o==='object'?o.value:o,l=typeof o==='object'?o.label:o;return `<label class="opt${S.data[key]===v?' selected':''}" onclick="pickR('${key}','${v}',this)"><div class="opt-indicator"></div>${l}</label>`;}).join('')}</div>`;
+}
+function check(key,opts){
+  return `<div class="options">${opts.map(o=>{const v=typeof o==='object'?o.value:o,l=typeof o==='object'?o.label:o;const sel=(S.data[key]||[]).includes(v);return `<label class="opt${sel?' selected':''}" onclick="pickC('${key}','${v}',this)"><div class="opt-indicator opt-check"></div>${l}</label>`;}).join('')}</div>`;
+}
+function pickR(k,v,el){S.data[k]=v;el.closest('.options').querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');}
+function pickC(k,v,el){if(!S.data[k])S.data[k]=[];const i=S.data[k].indexOf(v);if(i>-1){S.data[k].splice(i,1);el.classList.remove('selected');}else{S.data[k].push(v);el.classList.add('selected');}}
+function catTog(c,el){const i=S.cats.indexOf(c);if(i>-1){S.cats.splice(i,1);el.classList.remove('selected');}else{S.cats.push(c);el.classList.add('selected');}render();}
+function subTog(p,s,el){if(!S.subs[p])S.subs[p]=[];const i=S.subs[p].indexOf(s);if(i>-1){S.subs[p].splice(i,1);el.classList.remove('selected');}else{S.subs[p].push(s);el.classList.add('selected');}}
+
+function fld(label,key,type,ph,opts){
+  const v=S.data[key]||'';
+  const lbl=`<label class="field-label">${label} <span class="req">*</span></label>`;
+  if(type==='radio')return `<div class="field">${lbl}${radio(key,opts)}</div>`;
+  if(type==='check')return `<div class="field">${lbl}${check(key,opts)}</div>`;
+  if(type==='date')return `<div class="field">${lbl}<input type="date" value="${v}" onchange="sv('${key}',this.value)"></div>`;
+  return `<div class="field">${lbl}<input type="${type||'text'}" value="${v}" placeholder="${ph||''}" oninput="sv('${key}',this.value)"></div>`;
+}
+const nav=(back=true)=>`<div class="btn-row">${back?`<button class="btn" onclick="prev()">← Atrás</button>`:''}<button class="btn primary" onclick="next()">Continuar →</button></div>`;
+const yn=[{value:'Sí',label:'Sí'},{value:'No',label:'No'}];
+const budget=['$1,500 - $3,000','$3,000 - $5,000','$5,000 - $10,000','+$10,000'];
+const plazo=[{value:'Corto plazo',label:'Corto plazo (1-3 años)'},{value:'Mediano plazo',label:'Mediano plazo (3-7 años)'},{value:'Largo plazo',label:'Largo plazo (7+ años)'}];
+const gen=[{value:'Hombre',label:'Hombre'},{value:'Mujer',label:'Mujer'}];
+const catLabels={patrimonio:'Patrimonio y Bienes',salud:'Salud y Protección',futuro:'Futuro y Metas'};
+
+/* ── EMAIL HTML ── */
+function buildEmail(d){
+  const fecha=new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  const cats=S.cats.map(c=>catLabels[c]||c).join(', ');
+  const row=(l,v)=>`<tr><td style="padding:7px 12px;color:#6B7280;width:160px;font-size:13px;border-bottom:1px solid #F3F4F6">${l}</td><td style="padding:7px 12px;font-size:13px;border-bottom:1px solid #F3F4F6;font-weight:500">${v||'-'}</td></tr>`;
+  const h3=(t)=>`<h3 style="color:#1A56DB;font-size:14px;margin:20px 0 8px;padding-bottom:6px;border-bottom:2px solid #EBF2FF">${t}</h3>`;
+  let sec='';
+  const aS=S.subs['patrimonio']||[];
+  if(aS.includes('auto'))sec+=h3('🚗 Automóvil')+`<table width="100%" style="border-collapse:collapse;background:white;border-radius:8px;overflow:hidden">${row('RFC',d.auto_rfc)}${row('Género',d.auto_genero)}${row('Código Postal',d.auto_cp)}${row('Marca',d.auto_marca)}${row('Modelo',d.auto_modelo)}${row('Año',d.auto_anio)}${row('Transmisión',d.auto_transmision)}${row('Tipo',d.auto_tipo)}</table>`;
+  if(aS.includes('moto'))sec+=h3('🏍️ Motocicleta')+`<table width="100%" style="border-collapse:collapse">${row('RFC',d.moto_rfc)}${row('Género',d.moto_genero)}${row('Código Postal',d.moto_cp)}${row('Marca',d.moto_marca)}${row('Modelo',d.moto_modelo)}${row('Año',d.moto_anio)}</table>`;
+  if(aS.includes('hogar'))sec+=h3('🏠 Hogar')+`<table width="100%" style="border-collapse:collapse">${row('Código Postal',d.hogar_cp)}${row('Tipo',d.hogar_tipo)}${row('Valor','$'+(d.hogar_valor||''))}${row('M² totales',d.hogar_m2_total)}${row('M² construcción',d.hogar_m2_const)}${row('Antigüedad',(d.hogar_antiguedad||'')+' años')}${row('Material',d.hogar_material)}${row('Zona',d.hogar_zona)}${row('Relación',d.hogar_relacion)}${row('Protección',d.hogar_proteccion)}</table>`;
+  if(aS.includes('mascotas'))sec+=h3('🐾 Mascota')+`<table width="100%" style="border-collapse:collapse">${row('Dueño',d.mas_dueno)}${row('C.P.',d.mas_cp)}${row('Nombre mascota',d.mas_nombre)}${row('Tipo',d.mas_tipo)}${row('Raza',d.mas_raza)}${row('Edad',d.mas_edad)}${row('Sexo',d.mas_sexo)}${row('Protección',d.mas_nivel)}</table>`;
+  const sS=S.subs['salud']||[];
+  if(sS.includes('gmm'))sec+=h3('🏥 Gastos Médicos Mayores')+`<table width="100%" style="border-collapse:collapse">${row('Fecha nacimiento',d.gmm_nacimiento)}${row('Código Postal',d.gmm_cp)}${row('Peso',d.gmm_peso+' kg')}${row('Estatura',d.gmm_estatura+' mts')}${row('Enf. crónica',d.gmm_cronica)}${row('Cirugía previa',d.gmm_quirurgica)}${row('Interés',d.gmm_interes)}</table>`;
+  if(sS.includes('vida'))sec+=h3('🛡️ Seguro de Vida')+`<table width="100%" style="border-collapse:collapse">${row('Fecha nacimiento',d.vida_nacimiento)}${row('Género',d.vida_genero)}${row('Fuma',d.vida_fuma)}${row('Enf. crónica',d.vida_cronica)}${row('Hijos',d.vida_hijos)}${row('Dependientes',d.vida_dependientes)}${row('Presupuesto',d.vida_budget)}${row('Plazo',d.vida_plazo)}</table>`;
+  const fS=S.subs['futuro']||[];
+  if(fS.includes('ahorro'))sec+=h3('📈 Ahorro e Inversión')+`<table width="100%" style="border-collapse:collapse">${row('Edad',d.ahorro_edad)}${row('Género',d.ahorro_genero)}${row('Fuma',d.ahorro_fuma)}${row('Enf. crónica',d.ahorro_cronica)}${row('Hijos',d.ahorro_hijos)}${row('Dependientes',d.ahorro_dependientes)}${row('Presupuesto',d.ahorro_budget)}${row('Plazo',d.ahorro_plazo)}</table>`;
+  if(fS.includes('retiro'))sec+=h3('🏖️ Plan de Retiro')+`<table width="100%" style="border-collapse:collapse">${row('Edad',d.retiro_edad)}${row('Género',d.retiro_genero)}${row('Fuma',d.retiro_fuma)}${row('Enf. crónica',d.retiro_cronica)}${row('Hijos',d.retiro_hijos)}${row('Dependientes',d.retiro_dependientes)}${row('Pensión a los',d.retiro_pension)}${row('Presupuesto',d.retiro_budget)}${row('Plazo',d.retiro_plazo)}</table>`;
+  if(fS.includes('edufam'))sec+=h3('🎓 Educación Familiar')+`<table width="100%" style="border-collapse:collapse">${row('Tu edad',d.edufam_edad)}${row('Tu género',d.edufam_genero)}${row('Familiar',d.edufam_fam_nombre)}${row('Edad familiar',d.edufam_fam_edad)}${row('Género familiar',d.edufam_fam_genero)}${row('Enf. familiar',d.edufam_fam_cronica)}${row('Presupuesto',d.edufam_budget)}${row('Plazo',d.edufam_plazo)}</table>`;
+  if(fS.includes('edupro'))sec+=h3('📚 Mi Educación')+`<table width="100%" style="border-collapse:collapse">${row('Edad',d.edupro_edad)}${row('Género',d.edupro_genero)}${row('Fuma',d.edupro_fuma)}${row('Enf. crónica',d.edupro_cronica)}${row('Hijos',d.edupro_hijos)}${row('Dependientes',d.edupro_dependientes)}${row('Presupuesto',d.edupro_budget)}${row('Plazo',d.edupro_plazo)}</table>`;
+
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#F9FAFB;font-family:Arial,sans-serif">
+<div style="max-width:620px;margin:0 auto;padding:24px">
+  <div style="background:linear-gradient(135deg,#1039A0,#1A56DB);padding:28px 32px;border-radius:12px 12px 0 0">
+    <p style="color:#93C5FD;font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin:0 0 6px">CCSI CDMX · Módulo Virtual · ${fecha}</p>
+    <h1 style="color:white;font-size:22px;margin:0">Nueva solicitud de cotización</h1>
+  </div>
+  <div style="background:white;padding:28px 32px;border:1px solid #E5E7EB;border-top:none;border-radius:0 0 12px 12px">
+    ${h3('👤 Datos de contacto')}
+    <table width="100%" style="border-collapse:collapse">${row('Nombre','<strong>'+(d.nombre||'')+'</strong>')}${row('Correo',d.email)}${row('WhatsApp',d.whatsapp)}${row('Sucursal',d.sucursal)}${row('No. empleado',d.num_empleado)}</table>
+    <div style="margin:16px 0;padding:12px 16px;background:#EBF2FF;border-radius:8px;border-left:4px solid #1A56DB">
+      <p style="color:#1039A0;font-size:13px;font-weight:600;margin:0 0 4px">Áreas de interés</p>
+      <p style="color:#1A56DB;font-size:13px;margin:0">${cats}</p>
+    </div>
+    ${sec}
+    <hr style="border:none;border-top:1px solid #F3F4F6;margin:24px 0 12px">
+    <p style="color:#9CA3AF;font-size:11px;text-align:center;margin:0">Generado automáticamente · Módulo Virtual CCSI CDMX</p>
+  </div>
+</div></body></html>`;
+}
+
+/* ── SEND ── */
+async function sendForm(){
+  const btn=document.getElementById('sendBtn');
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Enviando...';}
+  const d=S.data;
+  const cats=S.cats.map(c=>catLabels[c]||c).join(', ');
+  try {
+    // Use no-cors — Make receives the body and processes it
+    await fetch(MAKE,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        to:TO,
+        subject:`Nueva cotización CCSI — ${d.nombre||'Cliente'} | ${d.sucursal||''} | ${cats}`,
+        body:buildEmail(d),
+        // Plain text fields for Make filtering
+        nombre:d.nombre||'',
+        email:d.email||'',
+        whatsapp:d.whatsapp||'',
+        sucursal:d.sucursal||'',
+        num_empleado:d.num_empleado||'',
+        categorias:cats,
+        fecha:new Date().toLocaleString('es-MX')
+      })
+    });
+    // Save for admin panel
+    const saved=JSON.parse(localStorage.getItem('ccsi_q')||'[]');
+    saved.unshift({id:Date.now(),fecha:new Date().toLocaleString('es-MX'),nombre:d.nombre,email:d.email,whatsapp:d.whatsapp,sucursal:d.sucursal,cats:[...S.cats],subs:JSON.parse(JSON.stringify(S.subs)),data:{...d}});
+    localStorage.setItem('ccsi_q',JSON.stringify(saved));
+    S.sent=true; render();
+  } catch(e){
+    if(btn){btn.disabled=false;btn.innerHTML='📤 Enviar solicitud de cotización';}
+    alert('Error de conexión. Verifica tu internet e intenta de nuevo.');
+  }
+}
+
+/* ── SCREENS ── */
+function renderScreen(id){
+  if(id==='datos')return `
+    <div class="section-header"><div class="section-eyebrow">Paso 1</div><div class="section-title">Tus datos de contacto</div></div>
+    <div class="card">
+      ${fld('Nombre completo','nombre','text','Tu nombre completo')}
+      ${fld('Correo electrónico','email','email','tu@correo.com')}
+      ${fld('WhatsApp','whatsapp','tel','5512345678')}
+      ${fld('Sucursal donde laboras','sucursal','radio',null,[{value:'Reforma 93',label:'Reforma 93'},{value:'Reforma 99',label:'Reforma 99'}])}
+      ${fld('Número de empleado/a','num_empleado','number','')}
+    </div>${nav(false)}`;
+
+  if(id==='prioridad')return `
+    <div class="section-header"><div class="section-eyebrow">Paso 2</div><div class="section-title">¿Qué deseas proteger?</div></div>
+    <div class="cat-grid">
+      <div class="cat-card${S.cats.includes('patrimonio')?' selected':''}" onclick="catTog('patrimonio',this)">
+        <div class="cat-icon-wrap">🏠</div>
+        <div class="cat-info"><h3>Mi Patrimonio y Bienes</h3><p>Autos, motos, hogar, mascotas</p></div>
+        <div class="cat-check"></div>
+      </div>
+      <div class="cat-card${S.cats.includes('salud')?' selected':''}" onclick="catTog('salud',this)">
+        <div class="cat-icon-wrap">🏥</div>
+        <div class="cat-info"><h3>Mi Salud y Protección Familiar</h3><p>Gastos médicos mayores, vida</p></div>
+        <div class="cat-check"></div>
+      </div>
+      <div class="cat-card${S.cats.includes('futuro')?' selected':''}" onclick="catTog('futuro',this)">
+        <div class="cat-icon-wrap">💰</div>
+        <div class="cat-info"><h3>Mi Futuro y Metas Financieras</h3><p>Ahorro, inversión, retiro, educación</p></div>
+        <div class="cat-check"></div>
+      </div>
+    </div>
+    ${S.cats.includes('patrimonio')?`<div class="sub-section"><div class="sub-section-title">¿Qué deseas proteger?</div><div class="card">${[{v:'auto',l:'🚗 Auto'},{v:'moto',l:'🏍️ Motocicleta'},{v:'hogar',l:'🏠 Hogar'},{v:'mascotas',l:'🐾 Mascotas'}].map(s=>`<label class="opt${(S.subs['patrimonio']||[]).includes(s.v)?' selected':''}" style="margin-bottom:8px" onclick="subTog('patrimonio','${s.v}',this)"><div class="opt-indicator opt-check"></div>${s.l}</label>`).join('')}</div></div>`:''}
+    ${S.cats.includes('salud')?`<div class="sub-section"><div class="sub-section-title">¿Cuál es tu prioridad?</div><div class="card">${[{v:'gmm',l:'🏥 Gastos Médicos Mayores'},{v:'vida',l:'🛡️ Seguro de Vida'}].map(s=>`<label class="opt${(S.subs['salud']||[]).includes(s.v)?' selected':''}" style="margin-bottom:8px" onclick="subTog('salud','${s.v}',this)"><div class="opt-indicator opt-check"></div>${s.l}</label>`).join('')}</div></div>`:''}
+    ${S.cats.includes('futuro')?`<div class="sub-section"><div class="sub-section-title">¿Qué meta financiera te interesa?</div><div class="card">${[{v:'ahorro',l:'📈 Ahorro e Inversión'},{v:'retiro',l:'🏖️ Plan de Retiro'},{v:'edufam',l:'🎓 Educación familiar (hijos/sobrinos)'},{v:'edupro',l:'📚 Mi propia educación'}].map(s=>`<label class="opt${(S.subs['futuro']||[]).includes(s.v)?' selected':''}" style="margin-bottom:8px" onclick="subTog('futuro','${s.v}',this)"><div class="opt-indicator opt-check"></div>${s.l}</label>`).join('')}</div></div>`:''}
+    ${nav()}`;
+
+  if(id==='auto')return `<div class="section-header"><div class="section-eyebrow">Automóvil</div><div class="section-title">Datos del vehículo</div></div>
+    <div class="card">${fld('RFC con homoclave (13 dígitos)','auto_rfc','text','AAAA000000AA0')}${fld('Género','auto_genero','radio',null,gen)}${fld('Código Postal actual','auto_cp','number','')}<div class="grid2">${fld('Marca','auto_marca','text','Ford, Nissan, Toyota...')}${fld('Modelo','auto_modelo','text','Nombre del modelo')}</div>${fld('Año','auto_anio','number','2020')}${fld('Transmisión','auto_transmision','radio',null,[{value:'Estándar',label:'Estándar'},{value:'Automática',label:'Automática'}])}${fld('Tipo de vehículo','auto_tipo','radio',null,[{value:'Nacional',label:'Nacional'},{value:'Legalizado',label:'Legalizado'}])}</div>${nav()}`;
+
+  if(id==='moto')return `<div class="section-header"><div class="section-eyebrow">Motocicleta</div><div class="section-title">Datos de la moto</div></div>
+    <div class="card">${fld('RFC con homoclave','moto_rfc','text','AAAA000000AA0')}${fld('Género','moto_genero','radio',null,gen)}${fld('Código Postal actual','moto_cp','text','')}<div class="grid2">${fld('Marca','moto_marca','text','Yamaha, Suzuki...')}${fld('Modelo','moto_modelo','text','Modelo')}</div>${fld('Año','moto_anio','number','2022')}</div>${nav()}`;
+
+  if(id==='hogar')return `<div class="section-header"><div class="section-eyebrow">Hogar</div><div class="section-title">Datos de la propiedad</div></div>
+    <div class="card">${fld('Código Postal de la propiedad','hogar_cp','number','')}${fld('Tipo de propiedad','hogar_tipo','radio',null,[{value:'Casa',label:'Casa'},{value:'Departamento',label:'Departamento'},{value:'Condominio',label:'Condominio'}])}${fld('Valor aproximado de la construcción ($)','hogar_valor','number','')}<div class="grid2">${fld('M² totales aprox.','hogar_m2_total','number','')}${fld('M² de construcción aprox.','hogar_m2_const','number','')}</div>${fld('Antigüedad de la construcción (años)','hogar_antiguedad','number','')}${fld('Material de construcción','hogar_material','radio',null,[{value:'Cemento',label:'Cemento'},{value:'Madera',label:'Madera'},{value:'Block',label:'Block'},{value:'Ladrillo',label:'Ladrillo'},{value:'Otro',label:'Otro'}])}${fld('Zona residencial','hogar_zona','radio',null,[{value:'Privada',label:'Privada'},{value:'Pública',label:'Pública'}])}${fld('Relación con la propiedad','hogar_relacion','radio',null,[{value:'Propietario',label:'Propietario'},{value:'Arrendatario',label:'Arrendatario'},{value:'Arrendador',label:'Arrendador'}])}${fld('Nivel de protección deseado','hogar_proteccion','radio',null,[{value:'Sencilla',label:'Sencilla'},{value:'Media',label:'Media'},{value:'Amplia',label:'Amplia'}])}</div>${nav()}`;
+
+  if(id==='mascotas')return `<div class="section-header"><div class="section-eyebrow">Mascota</div><div class="section-title">Datos de tu mascota</div></div>
+    <div class="card">${fld('Nombre del dueño','mas_dueno','text','')}${fld('Código Postal actual','mas_cp','text','')}${fld('Género del dueño','mas_genero','radio',null,gen)}${fld('Nombre de la mascota','mas_nombre','text','')}${fld('Tipo de mascota','mas_tipo','radio',null,[{value:'Perro',label:'🐕 Perro'},{value:'Gato',label:'🐈 Gato'}])}${fld('Raza','mas_raza','text','Boxer, Border Collie, Mestizo...')}${fld('Edad (3 meses a 9 años máx.)','mas_edad','text','Ej: 2 años')}${fld('Sexo de la mascota','mas_sexo','radio',null,[{value:'Macho',label:'Macho'},{value:'Hembra',label:'Hembra'}])}${fld('Nivel de protección','mas_nivel','radio',null,[{value:'Básica',label:'Básica'},{value:'Media',label:'Media'},{value:'Premium',label:'Premium'}])}</div>${nav()}`;
+
+  if(id==='gmm')return `<div class="section-header"><div class="section-eyebrow">Gastos Médicos Mayores</div><div class="section-title">Tu información de salud</div></div>
+    <div class="card">${fld('Fecha de nacimiento','gmm_nacimiento','date','')}${fld('Código Postal actual','gmm_cp','number','')}<div class="grid2">${fld('Peso aproximado (kg)','gmm_peso','number','')}${fld('Estatura aproximada (mts)','gmm_estatura','number','1.70')}</div>${fld('¿Padeces alguna enfermedad crónica? (diabetes, hipertensión, etc.)','gmm_cronica','radio',null,yn)}${fld('¿Has tenido alguna intervención quirúrgica?','gmm_quirurgica','radio',null,yn)}${fld('¿Tu interés es individual, familiar o ambas?','gmm_interes','radio',null,[{value:'Individual',label:'Individual'},{value:'Familiar',label:'Familiar'},{value:'Ambas',label:'Ambas'}])}</div>${nav()}`;
+
+  if(id==='vida')return `<div class="section-header"><div class="section-eyebrow">Seguro de Vida</div><div class="section-title">Tu perfil de vida</div></div>
+    <div class="card">${fld('Fecha de nacimiento','vida_nacimiento','date','')}${fld('Género','vida_genero','radio',null,gen)}${fld('¿Fumas?','vida_fuma','radio',null,yn)}${fld('¿Padeces alguna enfermedad crónica?','vida_cronica','radio',null,yn)}${fld('¿Tienes hijos?','vida_hijos','radio',null,yn)}${fld('¿Tienes dependientes económicos? (mamá, papá, familiar)','vida_dependientes','radio',null,yn)}${fld('Presupuesto mensual disponible','vida_budget','radio',null,budget)}${fld('Plazo deseado','vida_plazo','radio',null,plazo)}</div>${nav()}`;
+
+  if(id==='ahorro')return `<div class="section-header"><div class="section-eyebrow">Ahorro e Inversión</div><div class="section-title">Tu perfil de ahorro</div></div>
+    <div class="card">${fld('Edad','ahorro_edad','number','')}${fld('¿Fumas?','ahorro_fuma','radio',null,yn)}${fld('Género','ahorro_genero','radio',null,gen)}${fld('¿Padeces alguna enfermedad crónica?','ahorro_cronica','radio',null,yn)}${fld('¿Tienes hijos?','ahorro_hijos','radio',null,yn)}${fld('¿Tienes dependientes económicos?','ahorro_dependientes','radio',null,yn)}${fld('Presupuesto mensual disponible','ahorro_budget','radio',null,budget)}${fld('Plazo de ahorro deseado','ahorro_plazo','radio',null,plazo)}</div>${nav()}`;
+
+  if(id==='retiro')return `<div class="section-header"><div class="section-eyebrow">Plan de Retiro</div><div class="section-title">Tu plan de pensión</div></div>
+    <div class="card">${fld('Edad','retiro_edad','number','')}${fld('¿Fumas?','retiro_fuma','radio',null,yn)}${fld('Género','retiro_genero','radio',null,gen)}${fld('¿Padeces alguna enfermedad crónica?','retiro_cronica','radio',null,yn)}${fld('¿Tienes hijos?','retiro_hijos','radio',null,yn)}${fld('¿Tienes dependientes económicos?','retiro_dependientes','radio',null,yn)}${fld('¿A qué edad te gustaría pensionarte?','retiro_pension','radio',null,[{value:'60 años',label:'60 años'},{value:'65 años',label:'65 años'}])}${fld('Presupuesto mensual disponible','retiro_budget','radio',null,budget)}${fld('Plazo de ahorro deseado','retiro_plazo','radio',null,plazo)}</div>${nav()}`;
+
+  if(id==='edufam')return `<div class="section-header"><div class="section-eyebrow">Educación Familiar</div><div class="section-title">Plan profesional para tu familiar</div></div>
+    <div class="card">${fld('¿Qué edad tienes?','edufam_edad','number','')}${fld('Tu género','edufam_genero','radio',null,gen)}${fld('¿Fumas?','edufam_fuma','radio',null,yn)}${fld('¿Tienes hijos?','edufam_hijos','radio',null,yn)}${fld('¿Padeces alguna enfermedad crónica?','edufam_cronica','radio',null,yn)}
+    <div style="border-top:1px solid var(--border);margin:1rem 0;padding-top:1rem"><div class="sub-section-title">Datos del familiar a proteger</div></div>
+    ${fld('Nombre y apellido del familiar','edufam_fam_nombre','text','Ej: María García')}${fld('Edad del familiar','edufam_fam_edad','number','')}${fld('Género del familiar','edufam_fam_genero','radio',null,gen)}${fld('¿El familiar padece alguna enfermedad crónica?','edufam_fam_cronica','radio',null,yn)}${fld('Presupuesto mensual disponible','edufam_budget','radio',null,budget)}${fld('Plazo de ahorro deseado','edufam_plazo','radio',null,plazo)}</div>${nav()}`;
+
+  if(id==='edupro')return `<div class="section-header"><div class="section-eyebrow">Mi Educación</div><div class="section-title">Plan profesional para ti</div></div>
+    <div class="card">${fld('Edad','edupro_edad','number','')}${fld('Género','edupro_genero','radio',null,gen)}${fld('¿Fumas?','edupro_fuma','radio',null,yn)}${fld('¿Padeces alguna enfermedad crónica?','edupro_cronica','radio',null,yn)}${fld('¿Tienes hijos?','edupro_hijos','radio',null,yn)}${fld('¿Tienes dependientes económicos?','edupro_dependientes','radio',null,yn)}${fld('Presupuesto mensual disponible','edupro_budget','radio',null,budget)}${fld('Plazo de ahorro deseado','edupro_plazo','radio',null,plazo)}</div>${nav()}`;
+
+  if(id==='resumen'){
+    if(S.sent)return `<div class="success-wrap">
+      <div class="success-circle">✅</div>
+      <h2>¡Solicitud enviada!</h2>
+      <p>Un asesor te contactará en máximo <strong>24 horas</strong> vía WhatsApp o correo electrónico.</p>
+      <div class="success-badge">📧 Confirmación enviada a ${S.data.email||''}</div>
+    </div>`;
+
+    const d=S.data;
+    let sh='';
+    const aS=S.subs['patrimonio']||[];
+    if(aS.includes('auto'))sh+=`<div class="summary-block"><div class="summary-block-title">🚗 Auto</div>${sRow('RFC',d.auto_rfc)}${sRow('Marca / Modelo',`${d.auto_marca||''} ${d.auto_modelo||''}`)}${sRow('Año',d.auto_anio)}${sRow('Transmisión',d.auto_transmision)}</div>`;
+    if(aS.includes('moto'))sh+=`<div class="summary-block"><div class="summary-block-title">🏍️ Moto</div>${sRow('Marca / Modelo',`${d.moto_marca||''} ${d.moto_modelo||''}`)}${sRow('Año',d.moto_anio)}</div>`;
+    if(aS.includes('hogar'))sh+=`<div class="summary-block"><div class="summary-block-title">🏠 Hogar</div>${sRow('Tipo',d.hogar_tipo)}${sRow('Protección',d.hogar_proteccion)}</div>`;
+    if(aS.includes('mascotas'))sh+=`<div class="summary-block"><div class="summary-block-title">🐾 Mascota</div>${sRow('Nombre',d.mas_nombre)}${sRow('Tipo / Raza',`${d.mas_tipo||''} · ${d.mas_raza||''}`)}${sRow('Protección',d.mas_nivel)}</div>`;
+    const sS=S.subs['salud']||[];
+    if(sS.includes('gmm'))sh+=`<div class="summary-block"><div class="summary-block-title">🏥 Gastos Médicos Mayores</div>${sRow('Nacimiento',d.gmm_nacimiento)}${sRow('Interés',d.gmm_interes)}</div>`;
+    if(sS.includes('vida'))sh+=`<div class="summary-block"><div class="summary-block-title">🛡️ Seguro de Vida</div>${sRow('Nacimiento',d.vida_nacimiento)}${sRow('Presupuesto',d.vida_budget)}</div>`;
+    const fS=S.subs['futuro']||[];
+    if(fS.includes('ahorro'))sh+=`<div class="summary-block"><div class="summary-block-title">📈 Ahorro</div>${sRow('Presupuesto',d.ahorro_budget)}${sRow('Plazo',d.ahorro_plazo)}</div>`;
+    if(fS.includes('retiro'))sh+=`<div class="summary-block"><div class="summary-block-title">🏖️ Retiro</div>${sRow('Pensión a los',d.retiro_pension)}${sRow('Presupuesto',d.retiro_budget)}</div>`;
+    if(fS.includes('edufam'))sh+=`<div class="summary-block"><div class="summary-block-title">🎓 Edu Familiar</div>${sRow('Familiar',d.edufam_fam_nombre)}${sRow('Presupuesto',d.edufam_budget)}</div>`;
+    if(fS.includes('edupro'))sh+=`<div class="summary-block"><div class="summary-block-title">📚 Mi Educación</div>${sRow('Presupuesto',d.edupro_budget)}</div>`;
+
+    return `<div class="section-header"><div class="section-eyebrow">Último paso</div><div class="section-title">Revisa tu información</div></div>
+    <div class="card">
+      <div class="summary-block"><div class="summary-block-title">👤 Contacto</div>${sRow('Nombre',d.nombre)}${sRow('Correo',d.email)}${sRow('WhatsApp',d.whatsapp)}${sRow('Sucursal',d.sucursal)}${sRow('No. empleado',d.num_empleado)}</div>
+      <div class="summary-block"><div class="summary-block-title">Áreas de interés</div><div style="padding:6px 0">${S.cats.map(c=>`<span class="tag">${catLabels[c]||c}</span>`).join('')}</div></div>
+      ${sh}
+    </div>
+    <div class="btn-row"><button class="btn" onclick="prev()">← Editar</button><button id="sendBtn" class="btn primary" onclick="sendForm()">📤 Enviar solicitud de cotización</button></div>`;
+  }
+  return '';
+}
+
+/* ── ADMIN ── */
+function renderLogin(){
+  return `<div class="login-wrap">
+    <div class="login-card">
+      <div class="login-icon">🔐</div>
+      <div class="login-title">Acceso administrador</div>
+      <div class="login-sub">CCSI CDMX · Módulo Virtual</div>
+      <div id="le" class="login-err">Contraseña incorrecta</div>
+      <div class="field"><label class="field-label">Contraseña</label><input type="password" id="ap" placeholder="••••••••" onkeydown="if(event.key==='Enter')tryLogin()"></div>
+      <div class="btn-row" style="margin-top:1rem"><button class="btn primary" onclick="tryLogin()" style="flex:1">Ingresar</button></div>
+    </div>
+    <a class="back-link" onclick="S.view='client';render()">← Volver al formulario</a>
+  </div>`;
+}
+function tryLogin(){const v=document.getElementById('ap').value;if(v===PASS){S.view='admin';render();}else{document.getElementById('le').style.display='block';}}
+
+function renderAdmin(){
+  const qs=JSON.parse(localStorage.getItem('ccsi_q')||'[]');
+  const cl={patrimonio:'Patrimonio',salud:'Salud',futuro:'Futuro'};
+  return `<div class="admin-wrap">
+    <div class="admin-header">
+      <div><div class="admin-title">Panel administrador</div><div class="admin-sub">${qs.length} cotizacion${qs.length!==1?'es':''} recibida${qs.length!==1?'s':''}</div></div>
+      <button class="admin-logout" onclick="S.view='client';render()">Cerrar sesión</button>
+    </div>
+    ${qs.length===0?`<div class="empty-state"><div class="icon">📭</div><p>Aún no hay cotizaciones recibidas.</p></div>`:''}
+    ${qs.map((q,i)=>`<div class="cotiz-item">
+      <div class="cotiz-top">
+        <div style="cursor:pointer" onclick="document.getElementById('d${i}').style.display=document.getElementById('d${i}').style.display==='none'?'block':'none'">
+          <div class="cotiz-name">${q.nombre||'Sin nombre'}</div>
+          <div class="cotiz-meta">${q.fecha} · ${q.sucursal||'Sin sucursal'}</div>
+          <div class="cotiz-tags">${(q.cats||[]).map(c=>`<span class="tag">${cl[c]||c}</span>`).join('')}</div>
+        </div>
+        <button class="pdf-btn" onclick='dlPDF(${JSON.stringify(q).replace(/'/g,"&#39;")})'>⬇ PDF</button>
+      </div>
+      <div id="d${i}" class="cotiz-detail">
+        ${sRow('Correo',q.data.email)}${sRow('WhatsApp',q.data.whatsapp)}${sRow('No. empleado',q.data.num_empleado)}
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function dlPDF(q){
+  const d=q.data,cl={patrimonio:'Patrimonio y Bienes',salud:'Salud y Protección',futuro:'Futuro y Metas'};
+  let c=`COTIZACIÓN CCSI CDMX\nFecha: ${q.fecha}\n${'─'.repeat(48)}\n\nCONTACTO\nNombre:      ${d.nombre||''}\nCorreo:      ${d.email||''}\nWhatsApp:    ${d.whatsapp||''}\nSucursal:    ${d.sucursal||''}\nNo. empleado:${d.num_empleado||''}\n\nÁREAS: ${(q.cats||[]).map(x=>cl[x]||x).join(' · ')}\n\n`;
+  const aS=(q.subs&&q.subs['patrimonio'])||[];
+  if(aS.includes('auto'))c+=`AUTOMÓVIL\nRFC: ${d.auto_rfc||''} | Género: ${d.auto_genero||''} | C.P.: ${d.auto_cp||''}\nMarca: ${d.auto_marca||''} | Modelo: ${d.auto_modelo||''} | Año: ${d.auto_anio||''}\nTransmisión: ${d.auto_transmision||''} | Tipo: ${d.auto_tipo||''}\n\n`;
+  if(aS.includes('moto'))c+=`MOTOCICLETA\nRFC: ${d.moto_rfc||''} | Marca: ${d.moto_marca||''} | Modelo: ${d.moto_modelo||''} | Año: ${d.moto_anio||''}\n\n`;
+  if(aS.includes('hogar'))c+=`HOGAR\nTipo: ${d.hogar_tipo||''} | Valor: $${d.hogar_valor||''} | M² totales: ${d.hogar_m2_total||''} | M² const.: ${d.hogar_m2_const||''}\nAntigüedad: ${d.hogar_antiguedad||''} años | Material: ${d.hogar_material||''} | Zona: ${d.hogar_zona||''}\nRelación: ${d.hogar_relacion||''} | Protección: ${d.hogar_proteccion||''}\n\n`;
+  if(aS.includes('mascotas'))c+=`MASCOTA\nDueño: ${d.mas_dueno||''} | Nombre: ${d.mas_nombre||''} | Tipo: ${d.mas_tipo||''}\nRaza: ${d.mas_raza||''} | Edad: ${d.mas_edad||''} | Sexo: ${d.mas_sexo||''} | Protección: ${d.mas_nivel||''}\n\n`;
+  const sS=(q.subs&&q.subs['salud'])||[];
+  if(sS.includes('gmm'))c+=`GASTOS MÉDICOS MAYORES\nNacimiento: ${d.gmm_nacimiento||''} | C.P.: ${d.gmm_cp||''} | Peso: ${d.gmm_peso||''} kg | Estatura: ${d.gmm_estatura||''} mts\nEnf. crónica: ${d.gmm_cronica||''} | Cirugía previa: ${d.gmm_quirurgica||''} | Interés: ${d.gmm_interes||''}\n\n`;
+  if(sS.includes('vida'))c+=`SEGURO DE VIDA\nNacimiento: ${d.vida_nacimiento||''} | Género: ${d.vida_genero||''} | Fuma: ${d.vida_fuma||''}\nEnf. crónica: ${d.vida_cronica||''} | Hijos: ${d.vida_hijos||''} | Dependientes: ${d.vida_dependientes||''}\nPresupuesto: ${d.vida_budget||''} | Plazo: ${d.vida_plazo||''}\n\n`;
+  const fS=(q.subs&&q.subs['futuro'])||[];
+  if(fS.includes('ahorro'))c+=`AHORRO E INVERSIÓN\nEdad: ${d.ahorro_edad||''} | Género: ${d.ahorro_genero||''} | Presupuesto: ${d.ahorro_budget||''} | Plazo: ${d.ahorro_plazo||''}\n\n`;
+  if(fS.includes('retiro'))c+=`PLAN DE RETIRO\nEdad: ${d.retiro_edad||''} | Pensión a los: ${d.retiro_pension||''} | Presupuesto: ${d.retiro_budget||''} | Plazo: ${d.retiro_plazo||''}\n\n`;
+  if(fS.includes('edufam'))c+=`EDUCACIÓN FAMILIAR\nFamiliar: ${d.edufam_fam_nombre||''} | Edad: ${d.edufam_fam_edad||''} | Presupuesto: ${d.edufam_budget||''} | Plazo: ${d.edufam_plazo||''}\n\n`;
+  if(fS.includes('edupro'))c+=`MI EDUCACIÓN\nEdad: ${d.edupro_edad||''} | Presupuesto: ${d.edupro_budget||''} | Plazo: ${d.edupro_plazo||''}\n\n`;
+  c+=`${'─'.repeat(48)}\nGenerado por Panel Admin · CCSI CDMX`;
+  const blob=new Blob([c],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
+  a.download=`Cotizacion_CCSI_${(d.nombre||'Cliente').replace(/\s+/g,'_')}.txt`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+/* ── NAVIGATION ── */
+function next(){buildScreens();if(S.step<S.screens.length-1){S.step++;render();window.scrollTo(0,0);}}
+function prev(){if(S.step>0){S.step--;render();window.scrollTo(0,0);}}
+
+/* ── RENDER ── */
+function render(){
+  const root=document.getElementById('root');
+  const al=document.getElementById('adminLink');
+
+  if(S.view==='login'){
+    if(al)al.style.display='none';
+    root.innerHTML=renderLogin();return;
+  }
+  if(S.view==='admin'){
+    if(al)al.style.display='none';
+    root.innerHTML=renderAdmin();return;
+  }
+  if(al)al.style.display='';
+  buildScreens();
+  const pct=Math.round((S.step/(S.screens.length-1))*100);
+  const screen=S.screens[S.step];
+  root.innerHTML=`<div class="main">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progreso</span><span>${S.step+1} de ${S.screens.length}</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    ${renderScreen(screen.id)}
+  </div>`;
+}
+
+render();
+</script>
+</body>
+</html>
