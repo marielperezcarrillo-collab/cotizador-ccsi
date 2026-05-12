@@ -1927,15 +1927,49 @@ async function submitForm() {
     } catch(e) {}
   }
 
-  // Send admin notification
+  // ── Send admin email ──
   sendEmail('manglecapital@gmail.com', subject, adminBody);
 
-  // Send client confirmation after short delay (avoid simultaneous form submits)
+  // ── Send client confirmation ──
   if (data.correo && data.correo.indexOf('@') !== -1) {
     setTimeout(function() {
       sendEmail(data.correo, clientSubject, clientBody);
     }, 2000);
   }
+
+  // ── Send structured data to Make for Google Sheets ──
+  // Use a separate fetch with JSON so Make can parse individual fields
+  setTimeout(function() {
+    try {
+      var sheetsPayload = {
+        folio:        data.folio        || '',
+        timestamp:    data.timestamp    || '',
+        estado:       'Pendiente',
+        nombre:       data.nombre       || '',
+        numEmpleado:  data.numEmpleado  || '',
+        correo:       data.correo       || '',
+        whatsapp:     data.whatsapp     || '',
+        ciudad:       data.ciudad       || '',
+        sucursal:     data.sucursal     || '',
+        areas:        data.areas        || '',
+        secciones:    data.secciones    || '',
+        _type:        'sheets'
+      };
+      // Add dynamic fields
+      Object.entries(dynFields).forEach(function(pair) {
+        var key = pair[0].replace(/[^a-zA-Z0-9À-ɏ]/g, '_').substring(0, 50);
+        sheetsPayload['campo_' + key] = pair[1];
+      });
+
+      // Try fetch with no-cors for Sheets webhook
+      fetch(WEBHOOK, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sheetsPayload)
+      });
+    } catch(e) {}
+  }, 4000);
 
   document.getElementById('folioNum').textContent = folio;
   goStep(4);
