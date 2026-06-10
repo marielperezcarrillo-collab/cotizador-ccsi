@@ -3146,12 +3146,13 @@ async function submitForm() {
       </div>
     </div>`;
 
-  // Envío al webhook de Make via FormData
+  // === CORREO 1: Notificación interna a Mangle Capital ===
   try {
     var fd = new FormData();
     fd.append('subject', subject);
     fd.append('body', body);
     fd.append('to', 'manglecapital@gmail.com');
+    fd.append('tipo', 'interno');
     if (data) {
       Object.keys(data).forEach(function(k) {
         fd.append(k, data[k] != null ? String(data[k]) : '');
@@ -3159,6 +3160,50 @@ async function submitForm() {
     }
     fetch(WEBHOOK, { method:'POST', mode:'no-cors', body: fd });
   } catch(e) {}
+
+  // === CORREO 2: Confirmación al cliente ===
+  if (data && data.correo) {
+    var primerNombre = (data.nombre || '').split(' ')[0] || 'Estimado(a)';
+    var bodyCliente = `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+        <div style="background:#0d1b3e;padding:24px;text-align:center">
+          <h1 style="color:#e2c97e;margin:0;font-size:22px;letter-spacing:3px">MANGLE CAPITAL</h1>
+          <p style="color:#aaa;font-size:11px;margin:6px 0 0;letter-spacing:1px">CONFIRMACIÓN DE SOLICITUD</p>
+        </div>
+        <div style="border-bottom:3px solid #c8a84b"></div>
+        <div style="padding:28px;background:#f8f6f0">
+          <p style="color:#0d1b3e;font-size:15px;margin:0 0 16px">Hola <strong>${primerNombre}</strong>,</p>
+          <p style="color:#444;font-size:13px;line-height:1.7;margin:0 0 16px">
+            Recibimos tu solicitud de cotización correctamente. En las próximas <strong>24 horas hábiles</strong> un asesor de Mangle Capital se pondrá en contacto contigo para presentarte las mejores opciones personalizadas.
+          </p>
+          <div style="background:#fff;border-left:4px solid #c8a84b;padding:14px 18px;margin:20px 0;border-radius:0 8px 8px 0">
+            <p style="margin:0 0 6px;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px">Folio de tu solicitud</p>
+            <p style="margin:0;font-size:20px;font-weight:bold;color:#0d1b3e;letter-spacing:2px">${folio}</p>
+          </div>
+          <p style="color:#444;font-size:13px;line-height:1.7;margin:0 0 8px">
+            Guarda este folio — te servirá como referencia en cualquier consulta.
+          </p>
+          <p style="color:#444;font-size:13px;line-height:1.7;margin:0">
+            Si tienes alguna duda urgente puedes contactarnos directamente por WhatsApp.
+          </p>
+        </div>
+        <div style="background:#0d1b3e;padding:16px;text-align:center">
+          <p style="color:#c8a84b;font-size:11px;margin:0 0 4px;font-style:italic">Mangle Capital · Chetumal, Quintana Roo</p>
+          <p style="color:#666;font-size:10px;margin:0">manglecapital@gmail.com</p>
+        </div>
+      </div>`;
+
+    try {
+      var fd2 = new FormData();
+      fd2.append('subject', 'Tu solicitud fue recibida – Folio ' + folio + ' | Mangle Capital');
+      fd2.append('body', bodyCliente);
+      fd2.append('to', data.correo);
+      fd2.append('tipo', 'confirmacion_cliente');
+      fd2.append('folio', folio);
+      fd2.append('nombre', data.nombre || '');
+      fetch(WEBHOOK, { method:'POST', mode:'no-cors', body: fd2 });
+    } catch(e2) {}
+  }
 
   document.getElementById('folioNum').textContent = folio;
   goStep(4);
