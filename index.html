@@ -2790,22 +2790,31 @@ function buildDynSections() {
           cg.className = 'radio-group multicheck-group';
           cg.setAttribute('data-field', f.id);
           (f.options || []).forEach(function(o) {
-            const cl = document.createElement('label');
+            const cl = document.createElement('div');
             cl.className = 'radio-opt';
+            cl.style.cursor = 'pointer';
             const ci = document.createElement('input');
             ci.type = 'checkbox';
             ci.name = f.id;
             ci.value = o;
             ci.style.display = 'none';
-            cl.onclick = function() {
-              cl.classList.toggle('checked');
-              ci.checked = !ci.checked;
-              // Store as comma-separated
-              const checked = Array.from(cg.querySelectorAll('input[type=checkbox]:checked')).map(x=>x.value);
-              filledValues[f.label] = checked.join(', ');
+            // Use div so no double-fire from label/input interaction
+            cl.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              const isChecked = cl.classList.contains('checked');
+              if (isChecked) {
+                cl.classList.remove('checked');
+                ci.checked = false;
+              } else {
+                cl.classList.add('checked');
+                ci.checked = true;
+              }
+              const checkedVals = Array.from(cg.querySelectorAll('input[type=checkbox]:checked')).map(function(x){ return x.value; });
+              filledValues[f.label] = checkedVals.join(', ');
               const errEl = fg.querySelector('.dyn-field-error');
               if (errEl) errEl.classList.remove('show');
-            };
+            });
             const dot = document.createElement('span');
             dot.className = 'radio-dot';
             cl.appendChild(dot);
@@ -3122,13 +3131,35 @@ async function submitForm() {
       </div>
     </div>`;
 
+  // Envío al webhook de Make via iframe (evita CORS)
   try {
-    fetch(WEBHOOK, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subject, body, to: 'marielperezcarrillo@gmail.com', ...data })
+    var iframeName = 'wh_' + Date.now();
+    var iframe = document.createElement('iframe');
+    iframe.name = iframeName;
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = WEBHOOK;
+    form.target = iframeName;
+    form.style.display = 'none';
+
+    var payload = JSON.stringify({ subject: subject, body: body, to: 'marielperezcarrillo@gmail.com', data: data });
+    ['subject','body','to','payload'].forEach(function(key) {
+      var inp = document.createElement('input');
+      inp.type = 'hidden';
+      inp.name = key;
+      inp.value = key === 'subject' ? subject : key === 'body' ? body : key === 'to' ? 'marielperezcarrillo@gmail.com' : payload;
+      form.appendChild(inp);
     });
+
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(function() {
+      try { document.body.removeChild(form); document.body.removeChild(iframe); } catch(e) {}
+    }, 5000);
   } catch(e) {}
 
   document.getElementById('folioNum').textContent = folio;
