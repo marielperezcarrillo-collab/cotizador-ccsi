@@ -3131,36 +3131,29 @@ async function submitForm() {
       </div>
     </div>`;
 
-  // Envío al webhook de Make via iframe (evita CORS)
+  // Envío al webhook de Make
+  // Make recibe multipart/form-data con no-cors. Los campos llegan como 1.subject, 1.body etc.
+  // Para que funcione: en Make el webhook debe estar en modo "Immediately as data arrives"
   try {
-    var iframeName = 'wh_' + Date.now();
-    var iframe = document.createElement('iframe');
-    iframe.name = iframeName;
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = WEBHOOK;
-    form.target = iframeName;
-    form.style.display = 'none';
-
-    var payload = JSON.stringify({ subject: subject, body: body, to: 'marielperezcarrillo@gmail.com', data: data });
-    ['subject','body','to','payload'].forEach(function(key) {
-      var inp = document.createElement('input');
-      inp.type = 'hidden';
-      inp.name = key;
-      inp.value = key === 'subject' ? subject : key === 'body' ? body : key === 'to' ? 'marielperezcarrillo@gmail.com' : payload;
-      form.appendChild(inp);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-
-    setTimeout(function() {
-      try { document.body.removeChild(form); document.body.removeChild(iframe); } catch(e) {}
-    }, 5000);
+    var fd = new FormData();
+    fd.append('subject', subject);
+    fd.append('body', body);
+    fd.append('to', 'manglecapital@gmail.com');
+    if (data) {
+      Object.keys(data).forEach(function(k) {
+        fd.append(k, data[k] != null ? String(data[k]) : '');
+      });
+    }
+    fetch(WEBHOOK, { method:'POST', mode:'no-cors', body: fd });
   } catch(e) {}
+
+  // Respaldo: también intentar via XMLHttpRequest con JSON (por si Make cambia configuración)
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', WEBHOOK, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ subject: subject, body: body, to: 'manglecapital@gmail.com', data: data || {} }));
+  } catch(e2) {}
 
   document.getElementById('folioNum').textContent = folio;
   goStep(4);
