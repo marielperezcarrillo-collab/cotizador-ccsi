@@ -407,10 +407,36 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
 /* ══════════════════════════
    PROMOCIONES
 ══════════════════════════ */
-.promo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+/* ── CARRUSEL PROMOCIONES ── */
+.promo-carousel-wrap { position:relative;overflow:hidden;border-radius:16px;box-shadow:0 4px 24px rgba(13,27,62,0.10); }
+.promo-carousel-track { display:flex;transition:transform 0.45s cubic-bezier(0.4,0,0.2,1); }
+.promo-slide { min-width:100%;position:relative;cursor:pointer; }
+.promo-slide img { width:100%;max-height:460px;object-fit:contain;border-radius:16px;background:#0d1b3e;display:block; }
+.promo-slide-info { position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(13,27,62,0.92) 0%,transparent 100%);padding:24px 28px 20px;border-radius:0 0 16px 16px; }
+.promo-slide-period { color:#e2c97e;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px; }
+.promo-slide-link { display:inline-block;background:linear-gradient(135deg,#c8a84b,#b89438);color:#0d1b3e;font-size:0.72rem;font-weight:700;letter-spacing:1px;padding:7px 18px;border-radius:20px;text-decoration:none;text-transform:uppercase;margin-top:6px; }
+.promo-arrow { position:absolute;top:50%;transform:translateY(-50%);background:rgba(13,27,62,0.7);border:1.5px solid rgba(200,168,75,0.4);color:#e2c97e;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:1.1rem;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent; }
+.promo-arrow:hover { background:#c8a84b;color:#0d1b3e; }
+.promo-arrow.prev { left:12px; }
+.promo-arrow.next { right:12px; }
+.promo-dots { display:flex;justify-content:center;gap:8px;margin-top:14px; }
+.promo-dot { width:8px;height:8px;border-radius:50%;background:rgba(200,168,75,0.25);border:1.5px solid rgba(200,168,75,0.4);cursor:pointer;transition:all 0.2s; }
+.promo-dot.active { background:#c8a84b;border-color:#c8a84b;transform:scale(1.2); }
+.promo-empty { text-align:center;padding:60px 20px;color:var(--text-light); }
+.promo-upload-preview { display:none;margin-top:14px;border-radius:10px;overflow:hidden;max-height:200px; }
+.promo-upload-preview img { width:100%;object-fit:contain;background:#0d1b3e; }
+.promo-list-admin { margin-top:18px;display:flex;flex-direction:column;gap:10px; }
+.promo-list-item { display:flex;align-items:center;gap:12px;background:#f8f6f0;border:1px solid #e8e4dc;border-radius:10px;padding:10px 14px; }
+.promo-list-item img { width:56px;height:40px;object-fit:contain;border-radius:6px;background:#0d1b3e;flex-shrink:0; }
+.promo-list-item-info { flex:1;min-width:0; }
+.promo-list-item-period { font-size:0.72rem;color:#c8a84b;font-weight:600;letter-spacing:1px; }
+.promo-list-item-link { font-size:0.68rem;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.promo-list-item-del { background:none;border:none;color:#e05555;cursor:pointer;font-size:1rem;padding:4px 8px;border-radius:6px;flex-shrink:0;transition:background 0.15s; }
+.promo-list-item-del:hover { background:rgba(224,85,85,0.1); }
+@media (max-width:600px) {
+  .promo-slide img { max-height:280px; }
+  .promo-arrow { width:34px;height:34px;font-size:0.9rem; }
+  .promo-slide-info { padding:16px 16px 14px; }
 }
 .promo-card {
   background: var(--white);
@@ -1714,31 +1740,27 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
       <!-- Admin Promo Manager -->
       <div style="padding:24px;border-bottom:1px solid var(--border);background:var(--cream)">
         <div class="promo-admin-card">
-          <h4>🎁 Gestionar Promociones del Mes</h4>
+          <h4>🎁 Gestionar Carrusel de Promociones</h4>
           <div class="form-grid">
             <div class="form-group">
-              <label>Período (ej: Mayo - Junio 2026)</label>
+              <label>Período / Título (ej: Mayo - Junio 2026)</label>
               <input type="text" id="adminPromoPeriod" placeholder="Mayo - Junio 2026">
             </div>
             <div class="form-group">
-              <label>Link del catálogo (Canva)</label>
+              <label>Link del catálogo (opcional)</label>
               <input type="text" id="adminPromoLink" placeholder="https://canva.link/...">
             </div>
             <div class="form-group q-single">
-              <label>URL de imagen de portada</label>
-              <input type="text" id="adminPromoImg" placeholder="https://... o pega URL de imagen">
+              <label>Imagen de la promoción</label>
+              <input type="file" id="adminPromoFile" accept="image/*" onchange="handlePromoFile(event)">
             </div>
           </div>
-          <div class="promo-preview" id="promoPreview" style="display:none">
-            <img id="promoPreviewImg" src="" alt="Portada">
-            <div class="promo-preview-info">
-              <div class="promo-period" id="promoPreviewPeriod"></div>
-              <div class="promo-desc">Vista previa de la promoción</div>
-              <a class="promo-btn" id="promoPreviewLink" href="#" target="_blank">Ver Catálogo →</a>
-            </div>
+          <div class="promo-upload-preview" id="promoUploadPreview">
+            <img id="promoUploadPreviewImg" src="" alt="Vista previa">
           </div>
           <br>
-          <button class="btn btn-primary" onclick="savePromo()" style="font-size:0.75rem;padding:10px 24px">💾 Guardar Promoción</button>
+          <button class="btn btn-primary" onclick="savePromo()" style="font-size:0.75rem;padding:10px 24px">➕ Agregar al Carrusel</button>
+          <div class="promo-list-admin" id="promoListAdmin"></div>
         </div>
       </div>
 
@@ -1811,10 +1833,13 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
       <p>Descubre los beneficios y promociones exclusivas disponibles para ti</p>
     </div>
   </div>
-  <div class="promo-grid" id="promoGrid">
-    <!-- Loaded from localStorage -->
+  <div class="promo-carousel-wrap" id="promoCarouselWrap">
+    <div class="promo-carousel-track" id="promoTrack"></div>
+    <div class="promo-arrow prev" id="promoPrev" onclick="promoMove(-1)">&#8249;</div>
+    <div class="promo-arrow next" id="promoNext" onclick="promoMove(1)">&#8250;</div>
   </div>
-  <div id="promoEmpty" style="text-align:center;padding:60px 20px;color:var(--text-light);display:none">
+  <div class="promo-dots" id="promoDots"></div>
+  <div id="promoEmpty" class="promo-empty" style="display:none">
     <div style="font-size:3rem;margin-bottom:16px;opacity:0.3">🎁</div>
     <p>No hay promociones disponibles en este momento.<br>¡Pronto tendremos novedades para ti!</p>
   </div>
@@ -2268,54 +2293,160 @@ var DEFAULT_PROMO = {
 
 function loadPromos() {
   try {
-    var saved = localStorage.getItem('ccsi_promos');
-    if (saved) return JSON.parse(saved);
+    var saved = localStorage.getItem('ccsi_promos_v2');
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
   } catch(e) {}
   return [DEFAULT_PROMO];
+}
+
+function savePromosArr(arr) {
+  try { localStorage.setItem('ccsi_promos_v2', JSON.stringify(arr)); } catch(e) {
+    alert('⚠️ No se pudo guardar: el almacenamiento está lleno. Intenta eliminar alguna promoción o usar imágenes más ligeras.');
+  }
+}
+
+var pendingPromoImg = null;
+
+function handlePromoFile(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    pendingPromoImg = e.target.result;
+    var prev = document.getElementById('promoUploadPreview');
+    var img = document.getElementById('promoUploadPreviewImg');
+    img.src = pendingPromoImg;
+    prev.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
 }
 
 function savePromo() {
   var period = document.getElementById('adminPromoPeriod').value.trim();
   var link   = document.getElementById('adminPromoLink').value.trim();
-  var img    = document.getElementById('adminPromoImg').value.trim();
-  if (!period || !link) { alert('Por favor completa el período y el link del catálogo.'); return; }
-  if (!img) img = DEFAULT_PROMO.img;
+  if (!period) { alert('Por favor escribe un título o período para la promoción.'); return; }
+  if (!pendingPromoImg) { alert('Por favor selecciona una imagen.'); return; }
   var promos = loadPromos();
-  // Check if same period exists, update it
-  var idx = promos.findIndex(function(p){ return p.period === period; });
-  if (idx > -1) promos[idx] = {period:period, link:link, img:img};
-  else promos.unshift({period:period, link:link, img:img});
-  try { localStorage.setItem('ccsi_promos', JSON.stringify(promos)); } catch(e) {}
-  // Update preview
-  document.getElementById('promoPreview').style.display = 'flex';
-  document.getElementById('promoPreviewImg').src = img || DEFAULT_PROMO.img;
-  document.getElementById('promoPreviewPeriod').textContent = period;
-  document.getElementById('promoPreviewLink').href = link;
-  alert('✅ Promoción guardada correctamente.');
+  // If only the default promo exists, replace it instead of appending
+  if (promos.length === 1 && promos[0] === DEFAULT_PROMO) promos = [];
+  promos.push({period: period, link: link || '#', img: pendingPromoImg});
+  savePromosArr(promos);
+  // Reset form
+  document.getElementById('adminPromoPeriod').value = '';
+  document.getElementById('adminPromoLink').value = '';
+  document.getElementById('adminPromoFile').value = '';
+  document.getElementById('promoUploadPreview').style.display = 'none';
+  pendingPromoImg = null;
+  alert('✅ Promoción agregada al carrusel.');
   renderPromos();
+  renderPromoAdminList();
 }
+
+function deletePromo(idx) {
+  if (!confirm('¿Eliminar esta promoción del carrusel?')) return;
+  var promos = loadPromos();
+  promos.splice(idx, 1);
+  if (promos.length === 0) promos = [DEFAULT_PROMO];
+  savePromosArr(promos);
+  promoCurrentIndex = 0;
+  renderPromos();
+  renderPromoAdminList();
+}
+
+function renderPromoAdminList() {
+  var listEl = document.getElementById('promoListAdmin');
+  if (!listEl) return;
+  var promos = loadPromos();
+  listEl.innerHTML = promos.map(function(p, i) {
+    return '<div class="promo-list-item">' +
+      '<img src="' + p.img + '" alt="">' +
+      '<div class="promo-list-item-info">' +
+        '<div class="promo-list-item-period">' + p.period + '</div>' +
+        '<div class="promo-list-item-link">' + (p.link && p.link !== '#' ? p.link : 'Sin enlace') + '</div>' +
+      '</div>' +
+      '<button class="promo-list-item-del" onclick="deletePromo(' + i + ')" title="Eliminar">🗑</button>' +
+    '</div>';
+  }).join('');
+}
+
+var promoCurrentIndex = 0;
+var promoAutoTimer = null;
 
 function renderPromos() {
   var promos = loadPromos();
-  var grid = document.getElementById('promoGrid');
+  var track = document.getElementById('promoTrack');
+  var dots = document.getElementById('promoDots');
   var empty = document.getElementById('promoEmpty');
-  if (!grid) return;
+  var wrap = document.getElementById('promoCarouselWrap');
+  if (!track) return;
+
   if (promos.length === 0) {
-    grid.innerHTML = '';
+    track.innerHTML = '';
+    dots.innerHTML = '';
+    if (wrap) wrap.style.display = 'none';
     if (empty) empty.style.display = 'block';
     return;
   }
   if (empty) empty.style.display = 'none';
-  grid.innerHTML = promos.map(function(p) {
-    return '<a class="promo-card" href="' + p.link + '" target="_blank">' +
-      '<img class="promo-cover" src="' + (p.img || DEFAULT_PROMO.img) + '" alt="Portada"/>' +
-      '<div class="promo-info">' +
-        '<div class="promo-period">' + p.period + '</div>' +
-        '<div class="promo-desc">Promociones y beneficios exclusivos CCSI</div>' +
-        '<span class="promo-btn">Ver Catálogo &rarr;</span>' +
+  if (wrap) wrap.style.display = 'block';
+
+  track.innerHTML = promos.map(function(p) {
+    var hasLink = p.link && p.link !== '#';
+    return '<div class="promo-slide" onclick="' + (hasLink ? "window.open('" + p.link + "','_blank')" : '') + '">' +
+      '<img src="' + p.img + '" alt="' + p.period + '">' +
+      '<div class="promo-slide-info">' +
+        '<div class="promo-slide-period">' + p.period + '</div>' +
+        (hasLink ? '<a class="promo-slide-link" href="' + p.link + '" target="_blank" onclick="event.stopPropagation()">Ver Catálogo &rarr;</a>' : '') +
       '</div>' +
-    '</a>';
+    '</div>';
   }).join('');
+
+  dots.innerHTML = promos.map(function(_, i) {
+    return '<div class="promo-dot' + (i === promoCurrentIndex ? ' active' : '') + '" onclick="promoGoTo(' + i + ')"></div>';
+  }).join('');
+
+  var arrows = wrap ? wrap.querySelectorAll('.promo-arrow') : [];
+  arrows.forEach(function(a) { a.style.display = promos.length > 1 ? 'flex' : 'none'; });
+  dots.style.display = promos.length > 1 ? 'flex' : 'none';
+
+  if (promoCurrentIndex >= promos.length) promoCurrentIndex = 0;
+  promoUpdatePosition();
+  promoStartAuto();
+}
+
+function promoUpdatePosition() {
+  var track = document.getElementById('promoTrack');
+  if (!track) return;
+  track.style.transform = 'translateX(-' + (promoCurrentIndex * 100) + '%)';
+  var dots = document.getElementById('promoDots');
+  if (dots) {
+    Array.from(dots.children).forEach(function(d, i) {
+      d.classList.toggle('active', i === promoCurrentIndex);
+    });
+  }
+}
+
+function promoMove(dir) {
+  var promos = loadPromos();
+  promoCurrentIndex = (promoCurrentIndex + dir + promos.length) % promos.length;
+  promoUpdatePosition();
+  promoStartAuto();
+}
+
+function promoGoTo(i) {
+  promoCurrentIndex = i;
+  promoUpdatePosition();
+  promoStartAuto();
+}
+
+function promoStartAuto() {
+  if (promoAutoTimer) clearInterval(promoAutoTimer);
+  var promos = loadPromos();
+  if (promos.length <= 1) return;
+  promoAutoTimer = setInterval(function() { promoMove(1); }, 5000);
 }
 
 // ═══════════════════════════════════════════════
@@ -3275,6 +3406,7 @@ function checkAdmin() {
 }
 function showAdminPanel() {
   document.getElementById('adminPanel').style.display = 'block';
+  renderPromoAdminList();
   document.getElementById('totalBadge').textContent = cotizaciones.length + ' registro' + (cotizaciones.length !== 1 ? 's' : '');
   const list = document.getElementById('cotizacionesList');
   if (cotizaciones.length === 0) {
