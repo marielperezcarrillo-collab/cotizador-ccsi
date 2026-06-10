@@ -2511,10 +2511,10 @@ const SECTION_FIELDS = {
   'Auto': [
     {id:'auto_rfc',       label:'RFC con homoclave (13 dígitos)',                   type:'text',  placeholder:'XXXX000000XXX'},
     {id:'auto_genero',    label:'Género',                                            type:'radio', options:['Hombre','Mujer']},
-    {id:'auto_cp',        label:'Código Postal actual',                              type:'text',  placeholder:'06600'},
+    {id:'auto_cp',        label:'Código Postal actual',                              type:'number',placeholder:'06600'},
     {id:'auto_marca',     label:'Marca (Ford, Nissan, Toyota, VW, etc.)',            type:'text',  placeholder:'Ej: Nissan'},
     {id:'auto_modelo',    label:'Modelo',                                            type:'text',  placeholder:'Ej: Versa'},
-    {id:'auto_anio',      label:'Año',                                               type:'text',  placeholder:'2020'},
+    {id:'auto_anio',      label:'Año',                                               type:'number',placeholder:'2020'},
     {id:'auto_trans',     label:'Transmisión',                                       type:'radio', options:['Estándar','Automática']},
     {id:'auto_vehiculo',  label:'Vehículo',                                          type:'radio', options:['Nacional','Legalizado']},
     {id:'auto_aseg',      label:'¿Tienes alguna aseguradora de preferencia?',        type:'radio', options:['Ninguna','Quiero ver opciones','GNP','Allianz','Qualitas','Mapfre']},
@@ -2523,20 +2523,20 @@ const SECTION_FIELDS = {
   'Motocicleta': [
     {id:'moto_rfc',       label:'RFC con homoclave (13 dígitos)',                   type:'text',  placeholder:'XXXX000000XXX'},
     {id:'moto_genero',    label:'Género',                                            type:'radio', options:['Hombre','Mujer']},
-    {id:'moto_cp',        label:'Código Postal actual',                              type:'text',  placeholder:'06600'},
+    {id:'moto_cp',        label:'Código Postal actual',                              type:'number',placeholder:'06600'},
     {id:'moto_marca',     label:'Marca (Yamaha, Suzuki, Italika, Vento, etc.)',      type:'text',  placeholder:'Ej: Yamaha'},
     {id:'moto_modelo',    label:'Modelo',                                            type:'text',  placeholder:'Ej: MT-07'},
-    {id:'moto_anio',      label:'Año',                                               type:'text',  placeholder:'2021'},
+    {id:'moto_anio',      label:'Año',                                               type:'number',placeholder:'2021'},
     {id:'moto_aseg',      label:'¿Tienes alguna aseguradora de preferencia?',        type:'radio', options:['Ninguna','Quiero ver opciones','GNP','Mapfre','Qualitas']},
   ],
 
   'Hogar': [
-    {id:'hogar_cp',         label:'Código Postal de la propiedad',                  type:'text',  placeholder:'06600'},
+    {id:'hogar_cp',         label:'Código Postal de la propiedad',                  type:'number',placeholder:'06600'},
     {id:'hogar_tipo',       label:'Tipo de Propiedad',                              type:'radio', options:['Casa','Departamento','Condominio']},
-    {id:'hogar_valor',      label:'Valor de la construcción ($) aproximado',        type:'text',  placeholder:'2,000,000'},
-    {id:'hogar_m2total',    label:'Metros cuadrados M2 Totales aproximados',        type:'text',  placeholder:'120'},
-    {id:'hogar_m2const',    label:'Metros cuadrados M2 de construcción aproximados',type:'text',  placeholder:'90'},
-    {id:'hogar_antiguedad', label:'Antigüedad de la construcción (años)',           type:'text',  placeholder:'10'},
+    {id:'hogar_valor',      label:'Valor de la construcción ($) aproximado',        type:'number',placeholder:'2000000'},
+    {id:'hogar_m2total',    label:'Metros cuadrados M2 Totales aproximados',        type:'number',placeholder:'120'},
+    {id:'hogar_m2const',    label:'Metros cuadrados M2 de construcción aproximados',type:'number',placeholder:'90'},
+    {id:'hogar_antiguedad', label:'Antigüedad de la construcción (años)',           type:'number',placeholder:'10'},
     {id:'hogar_material',   label:'Material de la construcción',                    type:'radio', options:['Cemento','Madera','Block','Ladrillo','Otro']},
     {id:'hogar_zona',       label:'Zona residencial',                               type:'radio', options:['Privada','Pública']},
     {id:'hogar_relacion',   label:'Relación con la propiedad',                      type:'radio', options:['Propietario','Arrendatario','Arrendador']},
@@ -2546,7 +2546,7 @@ const SECTION_FIELDS = {
 
   'Mascotas': [
     {id:'mas_dueno',        label:'Nombre del dueño',                               type:'text',  placeholder:'Nombre completo'},
-    {id:'mas_cp',           label:'Código Postal Actual',                           type:'text',  placeholder:'06600'},
+    {id:'mas_cp',           label:'Código Postal Actual',                           type:'number',placeholder:'06600'},
     {id:'mas_genero_due',   label:'Género del dueño',                               type:'radio', options:['Hombre','Mujer']},
     {id:'mas_nombre',       label:'Nombre de la mascota',                           type:'text',  placeholder:'Ej: Firulais'},
     {id:'mas_tipo',         label:'Tipo de mascota',                                type:'radio', options:['Perro','Gato']},
@@ -2558,10 +2558,10 @@ const SECTION_FIELDS = {
   ],
 
   'GMM Individual': [
-    {id:'gmmi_fnac',        label:'Fecha de nacimiento',                            type:'text',  placeholder:'DD/MM/AAAA'},
-    {id:'gmmi_cp',          label:'Código Postal Actual',                           type:'text',  placeholder:'06600'},
-    {id:'gmmi_peso',        label:'Peso (kg) aproximado',                           type:'text',  placeholder:'70'},
-    {id:'gmmi_estatura',    label:'Estatura (mts) aproximada',                      type:'text',  placeholder:'1.70'},
+    {id:'gmmi_fnac',        label:'Fecha de nacimiento',                            type:'date',  placeholder:''},
+    {id:'gmmi_cp',          label:'Código Postal Actual',                           type:'number',placeholder:'06600'},
+    {id:'gmmi_peso',        label:'Peso (kg) aproximado',                           type:'decimal',placeholder:'70'},
+    {id:'gmmi_estatura',    label:'Estatura (mts) aproximada',                      type:'decimal',placeholder:'1.70'},
     {id:'gmmi_cronica',     label:'¿Padeces alguna enfermedad crónica? (Diabetes, hipertensión, etc.)', type:'radio', options:['Sí','No']},
     {id:'gmmi_cirugia',     label:'¿Has tenido alguna intervención quirúrgica?',    type:'radio', options:['Sí','No']},
     {id:'gmmi_interes',     label:'¿Tu interés es individual, familiar o ambas?',   type:'radio', options:['Individual','Familiar','Ambas']},
@@ -2569,19 +2569,19 @@ const SECTION_FIELDS = {
   ],
 
   'GMM Familiar': [
-    {id:'gmmf_fnac',        label:'Fecha de nacimiento del titular',                type:'text',  placeholder:'DD/MM/AAAA'},
-    {id:'gmmf_cp',          label:'Código Postal Actual',                           type:'text',  placeholder:'06600'},
-    {id:'gmmf_peso',        label:'Peso (kg) aproximado del titular',               type:'text',  placeholder:'70'},
-    {id:'gmmf_estatura',    label:'Estatura (mts) aproximada del titular',          type:'text',  placeholder:'1.70'},
+    {id:'gmmf_fnac',        label:'Fecha de nacimiento del titular',                type:'date',  placeholder:''},
+    {id:'gmmf_cp',          label:'Código Postal Actual',                           type:'number',placeholder:'06600'},
+    {id:'gmmf_peso',        label:'Peso (kg) aproximado del titular',               type:'decimal',placeholder:'70'},
+    {id:'gmmf_estatura',    label:'Estatura (mts) aproximada del titular',          type:'decimal',placeholder:'1.70'},
     {id:'gmmf_cronica',     label:'¿El titular padece alguna enfermedad crónica? (Diabetes, hipertensión, etc.)', type:'radio', options:['Sí','No']},
     {id:'gmmf_cirugia',     label:'¿El titular ha tenido alguna intervención quirúrgica?', type:'radio', options:['Sí','No']},
-    {id:'gmmf_integrantes', label:'Número de integrantes a asegurar',               type:'text',  placeholder:'Ej: 4'},
+    {id:'gmmf_integrantes', label:'Número de integrantes a asegurar',               type:'number',placeholder:'4'},
     {id:'gmmf_edades',      label:'Edades de los integrantes',                      type:'text',  placeholder:'Ej: 35, 32, 8, 5'},
     {id:'gmmf_aseg',        label:'¿Tienes alguna aseguradora de preferencia?',     type:'radio', options:['Ninguna','Quiero ver opciones','GNP','Allianz','Mapfre']},
   ],
 
   'Vida': [
-    {id:'vida_fnac',        label:'Fecha de nacimiento',                            type:'text',  placeholder:'DD/MM/AAAA'},
+    {id:'vida_fnac',        label:'Fecha de nacimiento',                            type:'date',  placeholder:''},
     {id:'vida_genero',      label:'Género',                                         type:'radio', options:['Hombre','Mujer']},
     {id:'vida_fuma',        label:'¿Fumas?',                                        type:'radio', options:['Sí','No']},
     {id:'vida_cronica',     label:'¿Padeces alguna enfermedad crónica? (Diabetes, hipertensión, etc.)', type:'radio', options:['Sí','No']},
@@ -2593,7 +2593,7 @@ const SECTION_FIELDS = {
   ],
 
   'Ahorro e Inversión': [
-    {id:'aho_edad',         label:'Edad',                                           type:'text',  placeholder:'35'},
+    {id:'aho_edad',         label:'Edad',                                           type:'number',placeholder:'35'},
     {id:'aho_fuma',         label:'¿Fumas?',                                        type:'radio', options:['Sí','No']},
     {id:'aho_genero',       label:'Género',                                         type:'radio', options:['Hombre','Mujer']},
     {id:'aho_cronica',      label:'¿Padeces alguna enfermedad crónica? (Diabetes, hipertensión, etc.)', type:'radio', options:['Sí','No']},
@@ -2605,7 +2605,7 @@ const SECTION_FIELDS = {
   ],
 
   'Inversión': [
-    {id:'inv_fnac',         label:'Fecha de nacimiento',                            type:'text',  placeholder:'DD/MM/AAAA'},
+    {id:'inv_fnac',         label:'Fecha de nacimiento',                            type:'date',  placeholder:''},
     {id:'inv_genero',       label:'Género',                                         type:'radio', options:['Hombre','Mujer']},
     {id:'inv_fuma',         label:'¿Fumas?',                                        type:'radio', options:['Sí','No']},
     {id:'inv_cronica',      label:'¿Padeces alguna enfermedad crónica? (Diabetes, hipertensión, etc.)', type:'radio', options:['Sí','No']},
@@ -2617,7 +2617,7 @@ const SECTION_FIELDS = {
   ],
 
   'Retiro': [
-    {id:'ret_edad',         label:'Edad',                                           type:'text',  placeholder:'45'},
+    {id:'ret_edad',         label:'Edad',                                           type:'number',placeholder:'45'},
     {id:'ret_fuma',         label:'¿Fumas?',                                        type:'radio', options:['Sí','No']},
     {id:'ret_genero',       label:'Género',                                         type:'radio', options:['Hombre','Mujer']},
     {id:'ret_cronica',      label:'¿Padeces alguna enfermedad crónica? (Diabetes, hipertensión, etc.)', type:'radio', options:['Sí','No']},
@@ -2630,13 +2630,13 @@ const SECTION_FIELDS = {
   ],
 
   'Educación Familiar': [
-    {id:'edu_edad',         label:'¿Qué edad tienes?',                              type:'text',  placeholder:'30'},
+    {id:'edu_edad',         label:'¿Qué edad tienes?',                              type:'number',placeholder:'30'},
     {id:'edu_genero',       label:'Género',                                         type:'radio', options:['Hombre','Mujer']},
     {id:'edu_fuma',         label:'¿Fumas?',                                        type:'radio', options:['Sí','No']},
     {id:'edu_hijos',        label:'¿Tienes hijos?',                                 type:'radio', options:['Sí','No']},
     {id:'edu_cronica',      label:'¿Padeces alguna enfermedad crónica? (Diabetes, hipertensión, etc.)', type:'radio', options:['Sí','No']},
     {id:'edu_fam_nombre',   label:'Nombre y Apellido de tu familiar (hijo/sobrino/nieto/hermano)', type:'text', placeholder:'Nombre completo'},
-    {id:'edu_fam_edad',     label:'Edad del familiar',                              type:'text',  placeholder:'8'},
+    {id:'edu_fam_edad',     label:'Edad del familiar',                              type:'number',placeholder:'8'},
     {id:'edu_fam_genero',   label:'Género de tu familiar',                          type:'radio', options:['Hombre','Mujer']},
     {id:'edu_fam_cronica',  label:'¿Tu familiar padece alguna enfermedad crónica?', type:'radio', options:['Sí','No']},
     {id:'edu_presupuesto',  label:'Presupuesto mensual aproximado disponible para esta meta', type:'radio', options:['$1,500 - $3,000','$3,000 - $5,000','$5,000 - $10,000','+$10,000']},
@@ -2645,7 +2645,7 @@ const SECTION_FIELDS = {
   ],
 
   'Mi Educación': [
-    {id:'miedu_edad',         label:'Edad',                                         type:'text',  placeholder:'28'},
+    {id:'miedu_edad',         label:'Edad',                                         type:'number',placeholder:'28'},
     {id:'miedu_genero',       label:'Género',                                       type:'radio', options:['Hombre','Mujer']},
     {id:'miedu_fuma',         label:'¿Fumas?',                                      type:'radio', options:['Sí','No']},
     {id:'miedu_cronica',      label:'¿Padeces alguna enfermedad crónica? (Diabetes, hipertensión, etc.)', type:'radio', options:['Sí','No']},
@@ -2771,7 +2771,8 @@ function buildDynSections() {
           const row = document.createElement('div');
           row.className = 'field-autofill-row';
           const inp = document.createElement('input');
-          inp.type = 'text';
+          inp.type = f.type === 'date' ? 'date' : f.type === 'number' ? 'number' : f.type === 'decimal' ? 'number' : 'text';
+          if (f.type === 'decimal') inp.step = '0.01';
           inp.id = f.id;
           inp.value = prevVal;
           inp.readOnly = true;
@@ -2795,7 +2796,21 @@ function buildDynSections() {
           fg.appendChild(row);
         } else {
           const inp = document.createElement('input');
-          inp.type = 'text';
+          // Set correct input type
+          if (f.type === 'date') {
+            inp.type = 'date';
+          } else if (f.type === 'number') {
+            inp.type = 'number';
+            inp.min = '0';
+            inp.setAttribute('inputmode', 'numeric');
+          } else if (f.type === 'decimal') {
+            inp.type = 'number';
+            inp.step = '0.01';
+            inp.min = '0';
+            inp.setAttribute('inputmode', 'decimal');
+          } else {
+            inp.type = 'text';
+          }
           inp.id = f.id;
           inp.placeholder = f.placeholder || '';
           inp.oninput = function() {
