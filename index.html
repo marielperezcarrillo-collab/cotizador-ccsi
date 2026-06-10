@@ -285,6 +285,7 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
 /* Pantalla 3 required error */
 .dyn-field-error { font-size:0.7rem;color:#c0392b;margin-top:4px;display:none; }
 .dyn-field-error.show { display:block; }
+.dyn-field-hint { font-size:0.7rem;color:#b87a20;margin-top:4px;line-height:1.5; }
 .areas-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px; }
 .area-card {
   border:2px solid #e8e4dc;border-radius:16px;padding:0;
@@ -2883,11 +2884,22 @@ function buildDynSections() {
           } else if (f.type === 'rfc') {
             inp.type = 'text';
             inp.maxLength = 13;
+            inp.placeholder = 'Ej: PEGJ950315 o PEGJ950315ABC';
             inp.oninput = function() {
               inp.value = inp.value.replace(/[^A-Za-z0-9]/g, '').slice(0, 13).toUpperCase();
-              if (inp.value.trim()) filledValues[f.label] = inp.value.trim();
+              const val = inp.value.trim();
+              if (val) filledValues[f.label] = val;
               const errEl = fg.querySelector('.dyn-field-error');
-              if (errEl) errEl.classList.remove('show');
+              if (!errEl) return;
+              // Show hint when typing, not as error
+              if (val.length > 0 && val.length < 10) {
+                errEl.style.color = '#b87a20';
+                errEl.textContent = 'Ej: Juan Pérez Gómez, 15 mar 1995 → PEGJ950315 + Homoclave. Si no tienes homoclave, coloca los primeros 10 dígitos.';
+                errEl.classList.add('show');
+              } else {
+                errEl.classList.remove('show');
+                errEl.style.color = '#c0392b';
+              }
             };
           } else if (f.type === 'decimal') {
             inp.type = 'number';
@@ -2995,11 +3007,14 @@ function validateStep2() {
             return;
           }
         }
-        // RFC: exactamente 13 caracteres alfanuméricos
+        // RFC: mínimo 10, máximo 13, solo alfanuméricos
         if (inp.maxLength === 13 && inp.type === 'text') {
-          if (!/^[A-Z0-9]{13}$/.test(val)) {
+          if (val.length < 10 || !/^[A-Z0-9]{10,13}$/.test(val)) {
             const errEl = fg.querySelector('.dyn-field-error');
-            if (errEl) { errEl.textContent = 'El RFC debe tener exactamente 13 caracteres (letras y números)'; errEl.classList.add('show'); }
+            if (errEl) {
+              errEl.textContent = 'Mínimo 10 caracteres. Ej: Juan Pérez Gómez, 15 mar 1995 → PEGJ950315 + Homoclave. Si no tienes homoclave, coloca los primeros 10 dígitos.';
+              errEl.classList.add('show');
+            }
             if (!firstError) firstError = inp;
             valid = false;
             return;
