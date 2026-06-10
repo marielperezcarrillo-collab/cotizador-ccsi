@@ -3146,9 +3146,7 @@ async function submitForm() {
       </div>
     </div>`;
 
-  // Envío al webhook de Make
-  // Make recibe multipart/form-data con no-cors. Los campos llegan como 1.subject, 1.body etc.
-  // Para que funcione: en Make el webhook debe estar en modo "Immediately as data arrives"
+  // Envío al webhook de Make via FormData
   try {
     var fd = new FormData();
     fd.append('subject', subject);
@@ -3161,14 +3159,6 @@ async function submitForm() {
     }
     fetch(WEBHOOK, { method:'POST', mode:'no-cors', body: fd });
   } catch(e) {}
-
-  // Respaldo: también intentar via XMLHttpRequest con JSON (por si Make cambia configuración)
-  try {
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', WEBHOOK, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify({ subject: subject, body: body, to: 'manglecapital@gmail.com', data: data || {} }));
-  } catch(e2) {}
 
   document.getElementById('folioNum').textContent = folio;
   goStep(4);
