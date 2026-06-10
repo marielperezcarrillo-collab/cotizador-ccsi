@@ -250,6 +250,12 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
 }
 .chip:hover { border-color:var(--gold);color:var(--navy);transform:translateY(-1px); }
 .chip.selected { border-color:var(--gold);background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--navy);font-weight:600;box-shadow:0 4px 16px rgba(200,168,75,0.3);transform:translateY(-1px); }
+.field-error { display:block;color:#c0392b;font-size:0.72rem;margin-top:5px;min-height:14px;font-weight:500; }
+.form-group input.error, .form-group select.error { border-color:#c0392b !important; box-shadow:0 0 0 2px rgba(192,57,43,0.15) !important; }
+.email-suggestion { padding:10px 16px;cursor:pointer;font-size:0.82rem;color:var(--navy);transition:background 0.15s;border-bottom:1px solid rgba(200,168,75,0.1); }
+.email-suggestion:last-child { border-bottom:none; }
+.email-suggestion:hover { background:rgba(200,168,75,0.08); }
+.email-suggestion span { color:var(--gold-dark);font-weight:600; }
 .dyn-section { border:1px solid rgba(200,168,75,0.2);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;animation:fadeIn 0.35s ease; }
 .dyn-section-header { background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);padding:14px 24px;font-size:0.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);display:flex;align-items:center;gap:10px; }
 .dyn-section-body { padding:24px;background:var(--white); }
@@ -1293,22 +1299,41 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
     </div>
     <div class="card-body">
       <div class="form-grid">
-        <div class="form-group"><label>Nombre completo *</label><input type="text" id="nombre" placeholder="Ej: María García López"></div>
-        <div class="form-group"><label>No. de Empleado *</label><input type="text" id="numEmp" placeholder="Ej: EMP-0012"></div>
-        <div class="form-group"><label>Correo electrónico *</label><input type="email" id="correo" placeholder="correo@empresa.com"></div>
-        <div class="form-group"><label>WhatsApp *</label><input type="tel" id="whatsapp" placeholder="55 1234 5678"></div>
+        <div class="form-group">
+          <label>Nombre completo *</label>
+          <input type="text" id="nombre" placeholder="Ej: María García López" oninput="clearError('nombre')">
+          <span class="field-error" id="err-nombre"></span>
+        </div>
+        <div class="form-group">
+          <label>No. de Empleado *</label>
+          <input type="text" id="numEmp" placeholder="Ej: 1234" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'');clearError('numEmp')">
+          <span class="field-error" id="err-numEmp"></span>
+        </div>
+        <div class="form-group" style="position:relative">
+          <label>Correo electrónico *</label>
+          <input type="text" id="correo" placeholder="correo@empresa.com" autocomplete="off" oninput="showEmailSuggestions();clearError('correo')">
+          <div id="emailSuggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid rgba(200,168,75,0.4);border-radius:0 0 8px 8px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>
+          <span class="field-error" id="err-correo"></span>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp (10 dígitos) *</label>
+          <input type="tel" id="whatsapp" placeholder="5512345678" maxlength="10" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'');clearError('whatsapp')">
+          <span class="field-error" id="err-whatsapp"></span>
+        </div>
         <div class="form-group">
           <label>Ciudad *</label>
-          <select id="ciudad" onchange="updateSucursal()">
+          <select id="ciudad" onchange="updateSucursal();clearError('ciudad')">
             <option value="">— Selecciona ciudad —</option>
             <option value="CDMX">CDMX</option>
             <option value="Guadalajara">Guadalajara</option>
             <option value="Tijuana">Tijuana</option>
           </select>
+          <span class="field-error" id="err-ciudad"></span>
         </div>
         <div class="form-group" id="sucursalGroup" style="display:none">
           <label>Módulo / Sucursal *</label>
-          <select id="sucursal"><option value="">— Selecciona módulo —</option></select>
+          <select id="sucursal" onchange="clearError('sucursal')"><option value="">— Selecciona módulo —</option></select>
+          <span class="field-error" id="err-sucursal"></span>
         </div>
         <div class="form-group"><label>Fecha de solicitud</label><input type="date" id="fecha"></div>
       </div>
@@ -2141,16 +2166,98 @@ function updateProgress(n) {
   }
 }
 
-function validateStep0() {
-  const reqs = ['nombre','correo','whatsapp','numEmp'];
-  for (const id of reqs) {
-    if (!document.getElementById(id).value.trim()) {
-      alert('Por favor completa todos los campos obligatorios (*).');
-      document.getElementById(id).focus();
-      return false;
-    }
+function clearError(id) {
+  const el = document.getElementById(id);
+  const err = document.getElementById('err-' + id);
+  if (el) el.classList.remove('error');
+  if (err) err.textContent = '';
+}
+
+function showFieldError(id, msg) {
+  const el = document.getElementById(id);
+  const err = document.getElementById('err-' + id);
+  if (el) { el.classList.add('error'); el.focus(); }
+  if (err) err.textContent = msg;
+}
+
+const EMAIL_DOMAINS = ['@gmail.com','@hotmail.com','@outlook.com','@icloud.com','@live.com','@yahoo.com.mx','@yahoo.com','@protonmail.com'];
+
+function showEmailSuggestions() {
+  const input = document.getElementById('correo');
+  const box = document.getElementById('emailSuggestions');
+  const val = input.value;
+  const atIdx = val.indexOf('@');
+  if (atIdx === -1 || val.length === 0) { box.style.display = 'none'; return; }
+  const user = val.substring(0, atIdx);
+  const typed = val.substring(atIdx);
+  const matches = EMAIL_DOMAINS.filter(d => d.startsWith(typed) && d !== typed);
+  if (matches.length === 0) { box.style.display = 'none'; return; }
+  box.innerHTML = matches.map(d =>
+    `<div class="email-suggestion" onclick="selectEmail('${user+d}')"><span>${user}</span>${d}</div>`
+  ).join('');
+  box.style.display = 'block';
+}
+
+function selectEmail(val) {
+  document.getElementById('correo').value = val;
+  document.getElementById('emailSuggestions').style.display = 'none';
+  clearError('correo');
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#correo') && !e.target.closest('#emailSuggestions')) {
+    const box = document.getElementById('emailSuggestions');
+    if (box) box.style.display = 'none';
   }
-  return true;
+});
+
+function validateStep0() {
+  let valid = true;
+
+  // Nombre
+  const nombre = document.getElementById('nombre').value.trim();
+  if (!nombre) { showFieldError('nombre', 'El nombre es obligatorio'); valid = false; }
+  else clearError('nombre');
+
+  // No. empleado - solo números
+  const numEmp = document.getElementById('numEmp').value.trim();
+  if (!numEmp) { showFieldError('numEmp', 'El número de empleado es obligatorio'); valid = false; }
+  else if (!/^\d+$/.test(numEmp)) { showFieldError('numEmp', 'Solo se permiten números'); valid = false; }
+  else clearError('numEmp');
+
+  // Correo - debe tener @ y dominio
+  const correo = document.getElementById('correo').value.trim();
+  const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!correo) { showFieldError('correo', 'El correo es obligatorio'); valid = false; }
+  else if (!emailReg.test(correo)) { showFieldError('correo', 'Ingresa un correo válido (ej: nombre@gmail.com)'); valid = false; }
+  else clearError('correo');
+
+  // WhatsApp - exactamente 10 dígitos numéricos
+  const wa = document.getElementById('whatsapp').value.trim();
+  if (!wa) { showFieldError('whatsapp', 'El WhatsApp es obligatorio'); valid = false; }
+  else if (!/^\d{10}$/.test(wa)) { showFieldError('whatsapp', 'Debe ser exactamente 10 dígitos numéricos'); valid = false; }
+  else clearError('whatsapp');
+
+  // Ciudad
+  const ciudad = document.getElementById('ciudad').value;
+  if (!ciudad) { showFieldError('ciudad', 'Selecciona una ciudad'); valid = false; }
+  else clearError('ciudad');
+
+  // Módulo/Sucursal (solo si ya se mostró el grupo)
+  const sucursalGroup = document.getElementById('sucursalGroup');
+  if (sucursalGroup && sucursalGroup.style.display !== 'none') {
+    const sucursal = document.getElementById('sucursal').value;
+    if (!sucursal) { showFieldError('sucursal', 'Selecciona un módulo'); valid = false; }
+    else clearError('sucursal');
+  }
+
+  if (!valid) {
+    // Scroll al primer error
+    const firstErr = document.querySelector('.form-group input.error, .form-group select.error');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  return valid;
 }
 
 // ═══════════════════════════════════════════════
