@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>CCSI – Portal de Beneficios</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -239,7 +239,7 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
   padding:5px 12px;border-radius:20px;white-space:nowrap;
 }
 /* ── CHIP CARDS (subsecciones) ── */
-.chip-cards { display:flex;flex-wrap:wrap;gap:12px; }
+.chip-cards { display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px; }
 .chip-card {
   display:flex;flex-direction:column;align-items:center;gap:8px;
   padding:14px 16px;border:2px solid #e8e4dc;border-radius:14px;
@@ -265,13 +265,14 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
 .chip-card.selected .chip-card-check { opacity:1;transform:scale(1); }
 .chip-card.selected .chip-card-name { color:var(--gold-dark); }
 /* ── RADIO FIX Pantalla 3 ── */
-.radio-opt { display:flex;align-items:center;gap:7px;background:var(--cream);border:1.5px solid #e0dbd0;border-radius:30px;padding:8px 16px;font-size:0.8rem;font-weight:400;cursor:pointer;transition:all 0.22s;color:var(--text-light);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(200,168,75,0.15);touch-action:manipulation; }
+.radio-opt { display:flex;align-items:center;gap:7px;background:var(--cream);border:1.5px solid #e0dbd0;border-radius:30px;padding:10px 16px;min-height:44px;font-size:0.8rem;font-weight:400;cursor:pointer;transition:all 0.22s;color:var(--text-light);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(200,168,75,0.15);touch-action:manipulation; }
 .radio-opt:hover { border-color:var(--gold);color:var(--navy);transform:translateY(-1px); }
 .radio-opt input[type=radio] { display:none; }
 .radio-opt.checked { border-color:var(--gold);background:linear-gradient(135deg,rgba(200,168,75,0.18),rgba(200,168,75,0.06));color:var(--navy);font-weight:600;box-shadow:0 3px 12px rgba(200,168,75,0.25);transform:translateY(-1px); }
 .radio-dot { width:9px;height:9px;border-radius:50%;border:1.5px solid #ccc;transition:all 0.22s;flex-shrink:0; }
 .radio-opt.checked .radio-dot { background:var(--gold);border-color:var(--gold);box-shadow:0 0 6px rgba(200,168,75,0.5); }
 /* Multicheck */
+.multicheck-group { flex-wrap:wrap; }
 .multicheck-group .radio-opt input[type=checkbox] { display:none; }
 .multicheck-group .radio-opt .radio-dot { border-radius:3px; }
 .multicheck-group .radio-opt.checked { border-color:var(--gold);background:linear-gradient(135deg,rgba(200,168,75,0.18),rgba(200,168,75,0.06));color:var(--navy);font-weight:600;box-shadow:0 3px 12px rgba(200,168,75,0.25); }
@@ -361,7 +362,7 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
 .dyn-section-header { background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);padding:14px 24px;font-size:0.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);display:flex;align-items:center;gap:10px; }
 .dyn-section-body { padding:24px;background:var(--white); }
 .radio-group { display:flex;flex-wrap:wrap;gap:8px;margin-top:2px; }
-.radio-opt { display:flex;align-items:center;gap:7px;background:var(--cream);border:1.5px solid #e0dbd0;border-radius:30px;padding:7px 16px;font-size:0.8rem;font-weight:400;cursor:pointer;transition:all 0.22s;color:var(--text-light);user-select:none;-webkit-user-select:none; }
+.radio-opt { display:flex;align-items:center;gap:7px;background:var(--cream);border:1.5px solid #e0dbd0;border-radius:30px;padding:10px 16px;min-height:44px;font-size:0.8rem;font-weight:400;cursor:pointer;transition:all 0.22s;color:var(--text-light);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(200,168,75,0.15);touch-action:manipulation; }
 .radio-opt:hover { border-color:var(--gold);color:var(--navy); }
 .radio-opt input[type=radio] { display:none; }
 .radio-opt.checked { border-color:var(--gold);background:linear-gradient(135deg,rgba(200,168,75,0.15),rgba(200,168,75,0.05));color:var(--navy);font-weight:600;box-shadow:0 2px 10px rgba(200,168,75,0.2); }
@@ -681,6 +682,10 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
 }
 @media (max-width:600px) {
   .form-grid,.areas-grid,.summary-grid { grid-template-columns:1fr !important; }
+  #dynSections .form-grid { grid-template-columns:1fr !important; }
+  .chip-cards { grid-template-columns:repeat(3,1fr) !important; }
+  .radio-group { gap:6px; }
+  .radio-opt { font-size:0.75rem;padding:9px 12px; }
   .area-card-bg { height:95px; }
   .card-body { padding:20px 16px; }
   .card-header { padding:18px 18px;gap:12px; }
@@ -701,7 +706,7 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
   .filter-group { min-width:100%; }
   .filter-group select { width:100%; }
   .btn-export { width:100%;text-align:center;padding:12px; }
-  .wa-float { bottom:16px;right:16px;width:48px;height:48px;font-size:1.3rem; }
+  .wa-float { bottom:16px;right:16px;width:52px;height:52px;font-size:1.4rem; }
   .promo-grid { grid-template-columns:1fr; }
   .contact-grid { grid-template-columns:1fr; }
   [id^="smenu"] { right:auto;left:0;min-width:180px; }
@@ -1307,6 +1312,12 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
   .card-body { padding:14px 12px; }
   .btn { padding:11px 14px; font-size:0.68rem; }
   .quiz-opt { padding:12px 14px; font-size:0.82rem; }
+  .chip-cards { grid-template-columns:repeat(2,1fr) !important; }
+  .chip-card { padding:10px 8px; min-width:0; }
+  .chip-card-icon { width:44px; height:44px; }
+  .chip-card-name { font-size:0.65rem; }
+  .radio-opt { font-size:0.72rem; padding:8px 10px; }
+  .area-card { padding:18px 14px; }
 }
 
 /* ── CALENDLY RESPONSIVE ── */
@@ -4032,6 +4043,12 @@ function printCotizacion(i) {
   .card-body { padding:14px 12px; }
   .btn { padding:11px 14px; font-size:0.68rem; }
   .quiz-opt { padding:12px 14px; font-size:0.82rem; }
+  .chip-cards { grid-template-columns:repeat(2,1fr) !important; }
+  .chip-card { padding:10px 8px; min-width:0; }
+  .chip-card-icon { width:44px; height:44px; }
+  .chip-card-name { font-size:0.65rem; }
+  .radio-opt { font-size:0.72rem; padding:8px 10px; }
+  .area-card { padding:18px 14px; }
 }
 
 /* ── CALENDLY RESPONSIVE ── */
@@ -4042,6 +4059,15 @@ function printCotizacion(i) {
   .calendly-inline-widget { height:550px !important; min-width:100% !important; }
   .wa-float { bottom:14px; right:14px; width:48px; height:48px; font-size:1.3rem; }
 }
+@media (min-width:601px) and (max-width:1024px) {
+  .form-grid { grid-template-columns:1fr 1fr; }
+  .areas-grid { grid-template-columns:1fr 1fr; }
+  .chip-cards { grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); }
+  .radio-group { gap:8px; }
+  main { padding:0 20px; }
+  .card-body { padding:28px 24px; }
+}
+
 </style></head><body>
     <div class="hdr"><h1>COTIZADOR CCSI</h1><p>SOLICITUD DE COTIZACIÓN · ${c.folio}</p></div>
     <div class="gold"></div>
