@@ -220,7 +220,66 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
 .form-group input::placeholder { color:#bbb;font-size:0.85rem; }
 .areas-label { font-size:0.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:16px; }
 .areas-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px; }
-/* ── ÁREA CARDS REDISEÑO ── */
+/* ── AREAS BANNER ── */
+.areas-banner {
+  display:flex;align-items:center;gap:14px;
+  background:linear-gradient(135deg,var(--navy) 0%,#1a3060 100%);
+  border-radius:12px;padding:16px 20px;margin-bottom:28px;
+  border:1px solid rgba(200,168,75,0.3);
+}
+.areas-banner-icon { font-size:1.4rem;color:var(--gold);flex-shrink:0; }
+.areas-banner-title { font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:white;margin-bottom:3px; }
+.areas-banner-sub { font-size:0.74rem;color:rgba(255,255,255,0.7);line-height:1.4; }
+.areas-banner-sub strong { color:var(--gold); }
+.areas-banner-badge {
+  margin-left:auto;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  color:var(--navy);font-size:0.62rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:5px 12px;border-radius:20px;white-space:nowrap;
+}
+/* ── CHIP CARDS (subsecciones) ── */
+.chip-cards { display:flex;flex-wrap:wrap;gap:12px; }
+.chip-card {
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:14px 16px;border:2px solid #e8e4dc;border-radius:14px;
+  cursor:pointer;transition:all 0.28s cubic-bezier(0.4,0,0.2,1);
+  background:var(--white);min-width:90px;position:relative;
+  -webkit-tap-highlight-color:rgba(200,168,75,0.15);touch-action:manipulation;
+  user-select:none;-webkit-user-select:none;
+  box-shadow:0 2px 8px rgba(13,27,62,0.05);
+}
+.chip-card:hover { border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 20px rgba(200,168,75,0.2); }
+.chip-card.selected { border-color:var(--gold);background:linear-gradient(135deg,rgba(200,168,75,0.12),rgba(200,168,75,0.04));box-shadow:0 6px 20px rgba(200,168,75,0.25);transform:translateY(-3px); }
+.chip-card-icon { width:58px;height:58px;border-radius:12px;display:flex;align-items:center;justify-content:center;transition:all 0.25s; }
+.chip-card-name { font-size:0.76rem;font-weight:600;color:var(--navy);text-align:center;line-height:1.3; }
+.chip-card-check {
+  position:absolute;top:-8px;right:-8px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--gold);color:var(--navy);
+  font-size:0.6rem;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(0.4);transition:all 0.25s;
+  box-shadow:0 2px 8px rgba(200,168,75,0.5);
+}
+.chip-card.selected .chip-card-check { opacity:1;transform:scale(1); }
+.chip-card.selected .chip-card-name { color:var(--gold-dark); }
+/* ── RADIO FIX Pantalla 3 ── */
+.radio-opt { display:flex;align-items:center;gap:7px;background:var(--cream);border:1.5px solid #e0dbd0;border-radius:30px;padding:8px 16px;font-size:0.8rem;font-weight:400;cursor:pointer;transition:all 0.22s;color:var(--text-light);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(200,168,75,0.15);touch-action:manipulation; }
+.radio-opt:hover { border-color:var(--gold);color:var(--navy);transform:translateY(-1px); }
+.radio-opt input[type=radio] { display:none; }
+.radio-opt.checked { border-color:var(--gold);background:linear-gradient(135deg,rgba(200,168,75,0.18),rgba(200,168,75,0.06));color:var(--navy);font-weight:600;box-shadow:0 3px 12px rgba(200,168,75,0.25);transform:translateY(-1px); }
+.radio-dot { width:9px;height:9px;border-radius:50%;border:1.5px solid #ccc;transition:all 0.22s;flex-shrink:0; }
+.radio-opt.checked .radio-dot { background:var(--gold);border-color:var(--gold);box-shadow:0 0 6px rgba(200,168,75,0.5); }
+/* autofill locked field */
+.field-autofill { background:rgba(200,168,75,0.06) !important;border-color:rgba(200,168,75,0.35) !important; }
+.field-autofill-row { display:flex;gap:6px;align-items:center; }
+.field-autofill-row input { flex:1; }
+.edit-btn { background:none;border:none;cursor:pointer;font-size:0.8rem;color:var(--gold-dark);padding:4px 8px;border-radius:6px;transition:background 0.15s;flex-shrink:0; }
+.edit-btn:hover { background:rgba(200,168,75,0.12); }
+/* Pantalla 3 required error */
+.dyn-field-error { font-size:0.7rem;color:#c0392b;margin-top:4px;display:none; }
+.dyn-field-error.show { display:block; }
 .areas-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px; }
 .area-card {
   border:2px solid #e8e4dc;border-radius:16px;padding:0;
@@ -1386,7 +1445,14 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
       <div class="card-header-text"><h2>Selección de Áreas</h2><p>Elige las áreas de tu interés para cotizar</p></div>
     </div>
     <div class="card-body">
-      <p class="areas-label">Selecciona una o más áreas de bienestar:</p>
+      <div class="areas-banner">
+        <div class="areas-banner-icon">✦</div>
+        <div>
+          <div class="areas-banner-title">¿Qué deseas cotizar hoy?</div>
+          <div class="areas-banner-sub">Puedes seleccionar <strong>una o más áreas</strong> — ¡en un solo envío cotizamos todo!</div>
+        </div>
+        <div class="areas-banner-badge">Multi-cotización</div>
+      </div>
       <div class="areas-grid">
 
         <!-- PATRIMONIO -->
@@ -1470,30 +1536,66 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
 
       </div>
       <div id="sub-patrimonio" class="subsec-group" style="display:none">
-        <div class="subsec-title">🏠 Subsecciones Patrimonio</div>
-        <div class="chips">
-          <div class="chip" onclick="toggleChip(this,'Auto')">🚗 Auto</div>
-          <div class="chip" onclick="toggleChip(this,'Motocicleta')">🏍️ Motocicleta</div>
-          <div class="chip" onclick="toggleChip(this,'Hogar')">🏡 Hogar</div>
-          <div class="chip" onclick="toggleChip(this,'Mascotas')">🐾 Mascotas</div>
+        <div class="subsec-title">¿Qué deseas proteger de tu patrimonio?</div>
+        <div class="chip-cards">
+          <div class="chip-card" onclick="toggleChip(this,'Auto')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#dce6ff,#c8d8ff)"><svg width="36" height="36" viewBox="0 0 36 36"><rect x="4" y="14" width="28" height="14" rx="4" fill="#3a5bc7" opacity="0.9"/><rect x="8" y="9" width="20" height="8" rx="3" fill="#4a6de0"/><circle cx="10" cy="28" r="3.5" fill="#1a2a7a"/><circle cx="26" cy="28" r="3.5" fill="#1a2a7a"/><rect x="6" y="18" width="8" height="5" rx="1" fill="#a8c0ff" opacity="0.8"/><rect x="22" y="18" width="8" height="5" rx="1" fill="#a8c0ff" opacity="0.8"/></svg></div>
+            <div class="chip-card-name">Auto</div><div class="chip-card-check">✓</div>
+          </div>
+          <div class="chip-card" onclick="toggleChip(this,'Motocicleta')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#fff0dc,#fde0b0)"><svg width="36" height="36" viewBox="0 0 36 36"><ellipse cx="10" cy="24" rx="6" ry="6" fill="none" stroke="#b87a20" stroke-width="2.5"/><ellipse cx="26" cy="24" rx="6" ry="6" fill="none" stroke="#b87a20" stroke-width="2.5"/><path d="M10 24 L16 14 L22 14 L28 20" stroke="#c8a84b" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="22" cy="14" r="3" fill="#c8a84b"/></svg></div>
+            <div class="chip-card-name">Motocicleta</div><div class="chip-card-check">✓</div>
+          </div>
+          <div class="chip-card" onclick="toggleChip(this,'Hogar')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#e8f4ff,#c8e4ff)"><svg width="36" height="36" viewBox="0 0 36 36"><polygon points="18,6 4,18 32,18" fill="#3a5bc7" opacity="0.85"/><rect x="7" y="18" width="22" height="14" rx="1.5" fill="#4a6de0" opacity="0.9"/><rect x="14" y="22" width="8" height="10" rx="1" fill="#2a3fa0"/><rect x="9" y="20" width="6" height="6" rx="1" fill="#a8c0ff" opacity="0.9"/><rect x="21" y="20" width="6" height="6" rx="1" fill="#a8c0ff" opacity="0.9"/></svg></div>
+            <div class="chip-card-name">Hogar</div><div class="chip-card-check">✓</div>
+          </div>
+          <div class="chip-card" onclick="toggleChip(this,'Mascotas')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#fef0e0,#fddcb0)"><svg width="36" height="36" viewBox="0 0 36 36"><ellipse cx="18" cy="22" rx="10" ry="8" fill="#c8a84b" opacity="0.85"/><circle cx="18" cy="13" r="6" fill="#c8a84b"/><ellipse cx="13" cy="10" rx="3" ry="4" fill="#b89438"/><ellipse cx="23" cy="10" rx="3" ry="4" fill="#b89438"/><circle cx="15" cy="14" r="1.2" fill="#2a3fa0"/><circle cx="21" cy="14" r="1.2" fill="#2a3fa0"/></svg></div>
+            <div class="chip-card-name">Mascotas</div><div class="chip-card-check">✓</div>
+          </div>
         </div>
       </div>
       <div id="sub-salud" class="subsec-group" style="display:none">
-        <div class="subsec-title">❤️‍🩹 Subsecciones Salud</div>
-        <div class="chips">
-          <div class="chip" onclick="toggleChip(this,'GMM Individual')">🏥 GMM Individual</div>
-          <div class="chip" onclick="toggleChip(this,'GMM Familiar')">👨‍👩‍👧 GMM Familiar</div>
-          <div class="chip" onclick="toggleChip(this,'Vida')">💙 Vida</div>
+        <div class="subsec-title">¿Qué tipo de protección de salud necesitas?</div>
+        <div class="chip-cards">
+          <div class="chip-card" onclick="toggleChip(this,'GMM Individual')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#fff0f0,#ffd8d8)"><svg width="36" height="36" viewBox="0 0 36 36"><circle cx="18" cy="13" r="7" fill="none" stroke="#e05555" stroke-width="2"/><path d="M10 30 C10 24 26 24 26 30" stroke="#e05555" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="15" y="7" width="6" height="12" rx="1.5" fill="#e05555" opacity="0.9"/><rect x="12" y="10" width="12" height="6" rx="1.5" fill="#e05555" opacity="0.9"/></svg></div>
+            <div class="chip-card-name">GMM Individual</div><div class="chip-card-check">✓</div>
+          </div>
+          <div class="chip-card" onclick="toggleChip(this,'GMM Familiar')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#fff0f0,#ffd8d8)"><svg width="36" height="36" viewBox="0 0 36 36"><circle cx="12" cy="13" r="5" fill="none" stroke="#e05555" stroke-width="1.8"/><circle cx="24" cy="13" r="5" fill="none" stroke="#e05555" stroke-width="1.8"/><circle cx="18" cy="10" r="4" fill="#e05555" opacity="0.7"/><path d="M5 30 C5 24 19 24 19 30" stroke="#e05555" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M17 30 C17 25 31 25 31 30" stroke="#e05555" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div>
+            <div class="chip-card-name">GMM Familiar</div><div class="chip-card-check">✓</div>
+          </div>
+          <div class="chip-card" onclick="toggleChip(this,'Vida')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#fff0f0,#ffd8d8)"><svg width="36" height="36" viewBox="0 0 36 36"><path d="M18 30 C18 30 6 21 6 13 C6 8 10 5 14 6 C16 7 17 8 18 10 C19 8 20 7 22 6 C26 5 30 8 30 13 C30 21 18 30 18 30Z" fill="#e05555" opacity="0.85"/><path d="M12 18 L16 18 L17 14 L19 22 L20 18 L24 18" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="chip-card-name">Vida</div><div class="chip-card-check">✓</div>
+          </div>
         </div>
       </div>
       <div id="sub-futuro" class="subsec-group" style="display:none">
-        <div class="subsec-title">🌟 Subsecciones Futuro</div>
-        <div class="chips">
-          <div class="chip" onclick="toggleChip(this,'Ahorro e Inversión')">🏦 Ahorro e Inversión</div>
-          <div class="chip" onclick="toggleChip(this,'Inversión')">📈 Inversión</div>
-          <div class="chip" onclick="toggleChip(this,'Retiro')">🌅 Retiro</div>
-          <div class="chip" onclick="toggleChip(this,'Educación Familiar')">🎓 Educación Familiar</div>
-          <div class="chip" onclick="toggleChip(this,'Mi Educación')">📚 Mi Educación</div>
+        <div class="subsec-title">¿Qué metas financieras quieres alcanzar?</div>
+        <div class="chip-cards">
+          <div class="chip-card" onclick="toggleChip(this,'Ahorro e Inversión')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#edfff0,#c8f0d0)"><svg width="36" height="36" viewBox="0 0 36 36"><circle cx="18" cy="18" r="12" fill="#3aaa5c" opacity="0.15"/><circle cx="18" cy="18" r="9" fill="none" stroke="#3aaa5c" stroke-width="2"/><text x="18" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#3aaa5c" font-family="Arial">$</text></svg></div>
+            <div class="chip-card-name">Ahorro e Inversión</div><div class="chip-card-check">✓</div>
+          </div>
+          <div class="chip-card" onclick="toggleChip(this,'Inversión')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#edfff0,#c8f0d0)"><svg width="36" height="36" viewBox="0 0 36 36"><polyline points="4,28 10,20 16,22 22,12 28,16 34,6" stroke="#3aaa5c" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><polygon points="28,4 34,4 34,10" fill="#c8a84b"/></svg></div>
+            <div class="chip-card-name">Inversión</div><div class="chip-card-check">✓</div>
+          </div>
+          <div class="chip-card" onclick="toggleChip(this,'Retiro')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#edfff0,#c8f0d0)"><svg width="36" height="36" viewBox="0 0 36 36"><path d="M4 28 Q18 10 32 28" stroke="#c8a84b" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="18" cy="20" r="4" fill="#3aaa5c" opacity="0.9"/><line x1="4" y1="30" x2="32" y2="30" stroke="#3aaa5c" stroke-width="1.5" opacity="0.5"/></svg></div>
+            <div class="chip-card-name">Retiro</div><div class="chip-card-check">✓</div>
+          </div>
+          <div class="chip-card" onclick="toggleChip(this,'Educación Familiar')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#edfff0,#c8f0d0)"><svg width="36" height="36" viewBox="0 0 36 36"><polygon points="18,6 32,13 18,20 4,13" fill="#3aaa5c" opacity="0.85"/><path d="M8 16 L8 25 C8 25 13 29 18 29 C23 29 28 25 28 25 L28 16" stroke="#3aaa5c" stroke-width="2" fill="none"/></svg></div>
+            <div class="chip-card-name">Educación Familiar</div><div class="chip-card-check">✓</div>
+          </div>
+          <div class="chip-card" onclick="toggleChip(this,'Mi Educación')">
+            <div class="chip-card-icon" style="background:linear-gradient(135deg,#edfff0,#c8f0d0)"><svg width="36" height="36" viewBox="0 0 36 36"><rect x="8" y="8" width="20" height="24" rx="2" fill="none" stroke="#3aaa5c" stroke-width="2"/><line x1="12" y1="14" x2="24" y2="14" stroke="#3aaa5c" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="18" x2="24" y2="18" stroke="#3aaa5c" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="22" x2="20" y2="22" stroke="#3aaa5c" stroke-width="1.5" stroke-linecap="round"/><polygon points="22,24 28,20 28,28" fill="#c8a84b" opacity="0.9"/></svg></div>
+            <div class="chip-card-name">Mi Educación</div><div class="chip-card-check">✓</div>
+          </div>
         </div>
       </div>
       <div class="btn-row">
@@ -2254,6 +2356,7 @@ function goStep(n) {
   if (n === 1 && !validateStep0()) return;
   if (n === 2 && selectedAreas.size === 0) { alert('Selecciona al menos un área.'); return; }
   if (n === 2) buildDynSections();
+  if (n === 3 && !validateStep2()) return;
   if (n === 3) buildSummary();
 
   document.querySelectorAll('[id^="step"]').forEach(el => el.style.display = 'none');
@@ -2389,12 +2492,14 @@ function toggleArea(area) {
 }
 
 function toggleChip(el, val) {
+  // Support both old .chip and new .chip-card
+  const target = el.closest('.chip-card') || el;
   if (selectedChips.has(val)) {
     selectedChips.delete(val);
-    el.classList.remove('selected');
+    target.classList.remove('selected');
   } else {
     selectedChips.add(val);
-    el.classList.add('selected');
+    target.classList.add('selected');
   }
 }
 
@@ -2563,6 +2668,19 @@ function buildDynSections() {
     'Educación Familiar':'🎓','Mi Educación':'📚'
   };
 
+  // Shared fields: if a field id matches a contact field, autofill from step0
+  const sharedMap = {
+    'auto_genero': null, 'moto_genero': null, 'mas_genero_due': null,
+    'vida_genero': null, 'aho_genero': null, 'inv_genero': null,
+    'ret_genero': null, 'eduf_genero': null, 'miedu_genero': null,
+    'gmmi_genero': null, 'gmmf_genero': null,
+    // RFC from nombre (not exact, but leave empty — no mapping)
+  };
+
+  // Fields that share values across sections (e.g. genero, rfc, edad)
+  // We track filled values to autofill repeats
+  const filledValues = {};
+
   const areaMap = {
     patrimonio: ['Auto','Motocicleta','Hogar','Mascotas'],
     salud: ['GMM Individual','GMM Familiar','Vida'],
@@ -2582,7 +2700,6 @@ function buildDynSections() {
     const div = document.createElement('div');
     div.className = 'dyn-section';
 
-    // Build header
     const header = document.createElement('div');
     header.className = 'dyn-section-header';
     header.textContent = (icons[sec] || '') + ' ' + sec;
@@ -2590,7 +2707,6 @@ function buildDynSections() {
 
     const body = document.createElement('div');
     body.className = 'dyn-section-body';
-
     const grid = document.createElement('div');
     grid.className = 'form-grid';
 
@@ -2600,40 +2716,108 @@ function buildDynSections() {
       if (f.type === 'radio' && f.options) {
         fg.className = 'form-group q-single';
         const lbl = document.createElement('label');
-        lbl.textContent = f.label;
+        lbl.textContent = f.label + ' *';
         fg.appendChild(lbl);
 
         const rg = document.createElement('div');
         rg.className = 'radio-group';
+        rg.setAttribute('data-field', f.id);
+
+        // Check if this field was already filled in another section
+        const prevVal = filledValues[f.label] || null;
+
         f.options.forEach(function(o) {
           const rl = document.createElement('label');
-          rl.className = 'radio-opt';
+          rl.className = 'radio-opt' + (prevVal === o ? ' checked' : '');
           const ri = document.createElement('input');
           ri.type = 'radio';
           ri.name = f.id;
           ri.value = o;
+          if (prevVal === o) ri.checked = true;
+          // Click handler
+          rl.onclick = function() {
+            rg.querySelectorAll('.radio-opt').forEach(x => x.classList.remove('checked'));
+            rl.classList.add('checked');
+            ri.checked = true;
+            filledValues[f.label] = o;
+            // Clear error
+            const errEl = fg.querySelector('.dyn-field-error');
+            if (errEl) errEl.classList.remove('show');
+          };
+          const dot = document.createElement('span');
+          dot.className = 'radio-dot';
+          rl.appendChild(dot);
           rl.appendChild(ri);
           rl.appendChild(document.createTextNode(' ' + o));
           rg.appendChild(rl);
         });
         fg.appendChild(rg);
+
+        const errSpan = document.createElement('span');
+        errSpan.className = 'dyn-field-error';
+        errSpan.textContent = 'Este campo es obligatorio';
+        fg.appendChild(errSpan);
+
       } else {
         fg.className = 'form-group';
         const lbl = document.createElement('label');
-        lbl.textContent = f.label;
-        const inp = document.createElement('input');
-        inp.type = 'text';
-        inp.id = f.id;
-        inp.placeholder = f.placeholder || '';
-        fg.appendChild(lbl);
-        fg.appendChild(inp);
+        lbl.textContent = f.label + ' *';
+
+        const prevVal = filledValues[f.label] || null;
+        const isLocked = prevVal !== null;
+
+        if (isLocked) {
+          // Autofill + lock with edit button
+          const row = document.createElement('div');
+          row.className = 'field-autofill-row';
+          const inp = document.createElement('input');
+          inp.type = 'text';
+          inp.id = f.id;
+          inp.value = prevVal;
+          inp.readOnly = true;
+          inp.className = 'field-autofill';
+          inp.setAttribute('data-locked', '1');
+          const editBtn = document.createElement('button');
+          editBtn.type = 'button';
+          editBtn.className = 'edit-btn';
+          editBtn.title = 'Editar';
+          editBtn.textContent = '✏️';
+          editBtn.onclick = function() {
+            inp.readOnly = false;
+            inp.removeAttribute('data-locked');
+            inp.classList.remove('field-autofill');
+            inp.focus();
+            editBtn.style.display = 'none';
+          };
+          row.appendChild(inp);
+          row.appendChild(editBtn);
+          fg.appendChild(lbl);
+          fg.appendChild(row);
+        } else {
+          const inp = document.createElement('input');
+          inp.type = 'text';
+          inp.id = f.id;
+          inp.placeholder = f.placeholder || '';
+          inp.oninput = function() {
+            if (inp.value.trim()) filledValues[f.label] = inp.value.trim();
+            const errEl = fg.querySelector('.dyn-field-error');
+            if (errEl) errEl.classList.remove('show');
+          };
+          fg.appendChild(lbl);
+          fg.appendChild(inp);
+        }
+
+        const errSpan = document.createElement('span');
+        errSpan.className = 'dyn-field-error';
+        errSpan.textContent = 'Este campo es obligatorio';
+        fg.appendChild(errSpan);
       }
       grid.appendChild(fg);
     });
 
     body.appendChild(grid);
 
-    // Comments field
+    // Comments field (optional)
     const cfg = document.createElement('div');
     cfg.className = 'form-group q-single';
     cfg.style.marginTop = '12px';
@@ -2650,6 +2834,45 @@ function buildDynSections() {
     div.appendChild(body);
     container.appendChild(div);
   });
+}
+
+function validateStep2() {
+  let valid = true;
+  let firstError = null;
+
+  document.querySelectorAll('#dynSections .dyn-section').forEach(sec => {
+    sec.querySelectorAll('.form-group').forEach(fg => {
+      const lbl = fg.querySelector('label');
+      if (!lbl || !lbl.textContent.endsWith('*')) return;
+
+      // Text input
+      const inp = fg.querySelector('input[type=text]');
+      if (inp) {
+        if (!inp.value.trim()) {
+          const errEl = fg.querySelector('.dyn-field-error');
+          if (errEl) errEl.classList.add('show');
+          if (!firstError) firstError = inp;
+          valid = false;
+        }
+        return;
+      }
+
+      // Radio group
+      const rg = fg.querySelector('.radio-group');
+      if (rg) {
+        const checked = rg.querySelector('input[type=radio]:checked');
+        if (!checked) {
+          const errEl = fg.querySelector('.dyn-field-error');
+          if (errEl) errEl.classList.add('show');
+          if (!firstError) firstError = rg;
+          valid = false;
+        }
+      }
+    });
+  });
+
+  if (firstError) firstError.scrollIntoView({ behavior:'smooth', block:'center' });
+  return valid;
 }
 
 // ═══════════════════════════════════════════════
