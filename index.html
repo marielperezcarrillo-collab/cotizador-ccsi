@@ -1613,6 +1613,9 @@ main { max-width:1100px;margin:0 auto;padding:0 24px; }
     </div>
     <div class="card-body">
       <div id="dynSections"></div>
+      <div id="step2ErrorBanner" style="display:none;background:#fdf0f0;border:1px solid #e05555;border-radius:10px;padding:12px 18px;margin-bottom:16px;color:#c0392b;font-size:0.82rem;font-weight:500;">
+        ⚠️ Por favor completa todos los campos obligatorios marcados con * antes de continuar.
+      </div>
       <div class="btn-row">
         <button class="btn btn-secondary" onclick="goStep(1)">&larr; Anterior</button>
         <button class="btn btn-primary" onclick="goStep(3)">Ver Resumen &rarr;</button>
@@ -2353,10 +2356,19 @@ let currentStep = 0;
 // NAVEGACIÓN
 // ═══════════════════════════════════════════════
 function goStep(n) {
-  if (n === 1 && !validateStep0()) return;
-  if (n === 2 && selectedAreas.size === 0) { alert('Selecciona al menos un área.'); return; }
+  const goingForward = n > currentStep;
+
+  // Solo validar al avanzar, nunca al regresar
+  if (goingForward) {
+    if (n === 1 && !validateStep0()) return;
+    if (n === 2 && selectedAreas.size === 0) {
+      alert('Selecciona al menos un área.');
+      return;
+    }
+    if (n === 3 && !validateStep2()) return;
+  }
+
   if (n === 2) buildDynSections();
-  if (n === 3 && !validateStep2()) return;
   if (n === 3) buildSummary();
 
   document.querySelectorAll('[id^="step"]').forEach(el => el.style.display = 'none');
@@ -2860,8 +2872,8 @@ function validateStep2() {
       const lbl = fg.querySelector('label');
       if (!lbl || !lbl.textContent.endsWith('*')) return;
 
-      // Text input
-      const inp = fg.querySelector('input[type=text]');
+      // Text / number / date input
+      const inp = fg.querySelector('input[type=text], input[type=number], input[type=date]');
       if (inp) {
         if (!inp.value.trim()) {
           const errEl = fg.querySelector('.dyn-field-error');
@@ -2886,6 +2898,8 @@ function validateStep2() {
     });
   });
 
+  const banner = document.getElementById('step2ErrorBanner');
+  if (banner) banner.style.display = valid ? 'none' : 'block';
   if (firstError) firstError.scrollIntoView({ behavior:'smooth', block:'center' });
   return valid;
 }
